@@ -1,0 +1,153 @@
+2013-09-14 Michael Arnold <github@razorsedge.org> - 0.8.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (13):
+  * Update ERB variables to be Ruby instance variables.
+  * Add support for CM agent TLS.
+  * Add rspec tests for listening_hostname/fqdn in CM agent.
+  * Add support for TLS server auth to CM agent.
+  * Add support for CM server TLS and java_ks.
+  * Fix the value of $server_ca_file to match the docs.
+  * Update README.md TLS section.
+  * Functests show that verify_cert_file needs CA chain.
+  * Add TLS settings to Class['cloudera'].
+  * Add support for installing parcels.
+  * Add a diectory filter for Geppetto.
+  * Add support for YUM proxy, username, and password.
+  * Update versions for 0.8.0 release.
+ 
+
+2013-08-17 Michael Arnold <github@razorsedge.org> - 0.7.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (21):
+  * Update the Modulefile summary.
+  * Remove execute bits from rspec test files.
+  * Add support for JCE unlimited strength policy files.
+  * Remove support for the beta version of Impala.
+  * Update the scm-config.ini template.
+  * Expand Puppet versions tested in Travis-CI.
+  * Rake validate to also check ERB for syntax errors.
+  * Remove git-log-to-changelog from Modulefile.
+  * Add before_script: back to Travis-CI config.
+  * Coorect test in Travis-CI before_script.
+  * Really correct the test in Travis-CI before_script.
+  * No idea how to correct the test in Travis-CI before_script.
+  * Stick with puppetlabs-mysql 0.9.0.
+  * I hate you Travis-CI before_script.
+  * Nope.  Stick with puppetlabs-mysql 0.8.1.
+  * Deal with changes to puppetlabs/mysql mysql::config.
+  * Use Cloudera's copy of ext-2.2.zip.
+  * Add contribution instructions to README.md.
+  * Revert to using puppetlabs-mysql HEAD.
+  * Drop testing support for Puppet 2.6.
+  * Update versions for 0.7.0 release.
+ 
+
+2013-04-10 Michael Arnold <github@razorsedge.org> - 0.6.3
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (2):
+  * Add puppet-lint to Gemfile to fix Travis.
+  * Update versions for 0.6.3 release.
+ 
+
+2013-04-10 Michael Arnold <github@razorsedge.org> - 0.6.2
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (2):
+  * Add puppet-lint support.
+  * Update versions for 0.6.2 release.
+ 
+
+2013-02-23 Michael Arnold <github@razorsedge.org> - 0.6.1
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (5):
+  * Add ripienaar/concat to fix postgresql rspec error.
+  * Add rspec require to Exec['scm_prepare_database'].
+  * Drop Travis support for testing old releases.
+  * Remove Note in README that was fixed in 0.6.0.
+  * Update versions for 0.6.1 release.
+ 
+
+2013-02-20 Michael Arnold <github@razorsedge.org> - 0.6.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (5):
+  * Re-enable PostgreSQL support.
+  * Fixed rspec tests for defined types.
+  * Finalize puppetlabs/postgresql dependency version.
+  * Add CHANGELOG generation to the Modulefile.
+  * Update versions for 0.6.0 release.
+ 
+
+2013-01-30 Michael Arnold <github@razorsedge.org> - 0.5.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (5):
+  * Remove trailing comma in class parameters.
+  * Add Travis-CI support for create_resources.
+  * Make puppet-lint happy.
+  * Remove PostgreSQL support.
+  * Update versions for 0.5.0 release.
+ 
+
+2013-01-30 Michael Arnold <github@razorsedge.org> - 0.3.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (5):
+  * Fix configs.
+  * First round of rspec tests.
+  * Rspec tests for cloudera::cm::server.
+  * Fix some spacing issues.
+  * Added the rest of the rspec tests.
+ 
+
+2013-01-25 Michael Arnold <github@razorsedge.org> - 0.1.0
+=========================================================
+
+ Michael Arnold <github@razorsedge.org> (37):
+  * Added standard puppet module boilerplate.
+  * Add Class['cloudera::repo'].
+  * Refacter SCM server and agent manifests.
+  * Rename module from scm to cloudera.
+  * Massive parameterized class effort.
+  * Stupid vim tried to be helpful.
+  * Manage Package['cloudera-manager-daemons'].
+  * Lots of fixes.
+  * Add puppet parser validate rake task.
+  * Fix missing curly brace. (Yay validation).
+  * Drop puppetlabs/stdlib dependency to 2.3.0.
+  * Disable service hadoop-httpfs.
+  * Do not install package cloudera-manager-daemons.
+  * Drop Flume support.
+  * Rename scm_agent and scm_server classes.
+  * Install flume-ng as part of cloudera::cdh.
+  * Stupid vim tried to be helpful.
+  * Refacter cloudera::cm::server.
+  * Add functionality to the database specific section.
+  * Fix $module variable and add module dependencies.
+  * Add support for Java installation.
+  * Add java alternatives to set up symlinks.
+  * Add headers to files managed by puppet.
+  * Extra Oozie support.
+  * Linting and Puppetdoc.
+  * More linting.
+  * Improve Oozie EXT support.
+  * Allow CM to control the Flume service.
+  * Keep it simple.  Just include mysql::java.
+  * Add repositories to fixtures.yml.
+  * Add some Hive classes.
+  * Use safe_autoupgrade.
+  * Prepend cm_ to variable's documentation.
+  * Deal with package problems for hue-plugins.
+  * Add support fot Hadoop HDFS FUSE.
+  * Update README.md.
+  * Fix up README.md to look better.
+ 
+
+2011-11-17 Patrick Taylor Ramsey <ptr@cloudera.com> - 0.0.1
+===========================================================
+
+
