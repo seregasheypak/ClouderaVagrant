@@ -1,8 +1,5 @@
-
-
-
 node default {
-  include cloudera::cloudera
+  include 'cloudera'
   
   class { 'cloudera':
         cm_server_host => 'vm-cluster-node1.localdomain',
