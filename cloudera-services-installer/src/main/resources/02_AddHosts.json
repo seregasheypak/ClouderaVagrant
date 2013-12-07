@@ -1,0 +1,13 @@
+{
+    "items": [
+        {
+            "hostId": "vm-cluster-node1.localdomain"
+        },
+        {
+            "hostId": "vm-cluster-node2.localdomain"
+        },
+        {
+            "hostId": "vm-cluster-node3.localdomain"
+        }
+    ]
+}
