@@ -1,5 +1,4 @@
-#$os_maj_version = '6'
-#$architecture ='x86_64'
+$cm_version = '4.8.0'
 
 define append_if_no_such_line($file, $line, $refreshonly = 'false') {
   exec { "/bin/echo '$line' >> '$file'":
@@ -53,7 +52,7 @@ node default {
 
 node 'vm-cluster-node1.localdomain' inherits default {
   class { 'cloudera':
-        cm_version => '4.8.0',
+        cm_version => $cm_version,
         cm_server_host => 'vm-cluster-node1.localdomain',
         use_parcels    => true,
     } ->   
@@ -62,15 +61,18 @@ node 'vm-cluster-node1.localdomain' inherits default {
 
 node 'vm-cluster-node2.localdomain' inherits default {
   class { 'cloudera':
-        cm_version => '4.8.0',
+        cm_version => $cm_version,
         cm_server_host => 'vm-cluster-node1.localdomain',
-        use_parcels    => true,
-        
-  }
-#  }->    
-#  class { 'cloudera::cm':
-#    server_host => 'vm-cluster-node1.localdomain',
-#  }
+        use_parcels    => true,        
+  }  
+}
+
+node 'vm-cluster-node3.localdomain' inherits default {
+  class { 'cloudera':
+        cm_version => $cm_version,
+        cm_server_host => 'vm-cluster-node1.localdomain',
+        use_parcels    => true,        
+  }  
 }
 
 
