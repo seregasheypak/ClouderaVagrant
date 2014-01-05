@@ -2,6 +2,7 @@ package cloudera.services.installer.model
 
 import com.cloudera.api.model.ApiCluster
 import com.cloudera.api.model.ApiClusterList
+import com.cloudera.api.model.ApiClusterRef
 
 /**
  * User: sergey.sheypak
@@ -10,12 +11,16 @@ import com.cloudera.api.model.ApiClusterList
  */
 class Cluster implements BuiltModel{
 
-    String name = System.getProperty('cluster.name', 'cloudera-cluster')
-    String version = System.getProperty('cluster.version', 'CDH4')
+    static name = System.getProperty('cluster.name', 'cloudera-cluster')
+    static version = System.getProperty('cluster.version', 'CDH4')
 
     def build(){
         def apiClusterList = new ApiClusterList()
         apiClusterList.add(new ApiCluster(name: name, version: version))
         apiClusterList
+    }
+
+    def getApiClusterRef(){
+        new ApiClusterRef(clusterName: name)
     }
 }
