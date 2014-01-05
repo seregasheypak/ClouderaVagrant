@@ -35,9 +35,12 @@ class Executor {
     def waitForParcelActivation(){
         ScmConf.PRODUCTS.each {product ->
             println "Starting download a product: $product"
-            def apiCommand = root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(product.name, product.version).startDownloadCommand()
-            println apiCommand
-            println root.getClustersResource().getParcelsResource(Cluster.name).readParcels(DataView.SUMMARY)
+            root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(product.name, product.version).startDownloadCommand()
+
+            def parcelStatusList = root.getClustersResource().getParcelsResource(Cluster.name).readParcels(DataView.SUMMARY)
+            parcelStatusList.each { status ->
+                status.stage
+            }
         }
     }
 
