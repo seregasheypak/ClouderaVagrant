@@ -10,8 +10,8 @@ import com.cloudera.api.model.ApiConfigList
  */
 class ScmConf implements BuiltModel{
 
-    static CDH = [name:'CDH', version:'4.5.0.30']
-    static IMPALA = [name: 'IMPALA', version: '1.2.3.97']
+    static CDH = [name:'CDH', version:'4.5.0-1.cdh4.5.0.p0.30']
+    static IMPALA = [name: 'IMPALA', version: '1.2.3-1.p0.97']
     static PRODUCTS = [CDH, IMPALA]
 
     def build(){
