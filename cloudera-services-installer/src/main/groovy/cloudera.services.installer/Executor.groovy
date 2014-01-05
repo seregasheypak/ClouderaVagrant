@@ -37,33 +37,8 @@ class Executor {
             println "Starting download a product: $product"
             def apiCommand = root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(product.name, product.version).startDownloadCommand()
             println apiCommand
+            println root.getClustersResource().getParcelsResource(Cluster.name).readParcels(DataView.SUMMARY)
         }
-
-//        root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(ScmConf.CDH.name, ScmConf.CDH.version).startDownloadCommand()
-//        root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(ScmConf.IMPALA.name, ScmConf.IMPALA.version).startDownloadCommand()
-
-//        def waitLimit = System.getProperty('parcel.activation.wait.limit.sec','600') as Integer
-//        (0..waitLimit).each{ counter ->
-//            sleep(SECOND)
-//            if(counter % 10 == 0){
-//                new ScmConf().products.each {product ->
-//                    println "Inspecting product status: $product and culster: ${new Cluster().name}"
-//
-//                    println root.clustersResource.getParcelsResource(new Cluster().name).parcelUsage
-//                    //NOT FOUND! Exception
-//                    //println root.clustersResource.getParcelsResource(new Cluster().name).getParcelResource(product.name,product.version).readParcel().state
-//
-//                    //NOTHING
-//                    //println root.clouderaManagerResource.listActiveCommands(DataView.EXPORT)
-//
-//                    //NOTHING
-//                    //println root.clustersResource.getParcelsResource(new Cluster().name).parcelUsage.parcels
-//
-//                    //???
-//                }
-//            }
-//        }
-//        this
     }
 
 
