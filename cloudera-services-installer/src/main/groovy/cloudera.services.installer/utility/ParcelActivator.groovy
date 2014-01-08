@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory
  * Date: 05.01.14
  * Time: 23:12
  *
- * The aim of this class is to force parcel distribution over cluster hosts
+ * The aim of this class is to force parcel distribution over cluster HOSTS
  */
 class ParcelActivator {
     private static final Logger LOG = LoggerFactory.getLogger(ParcelActivator.class)

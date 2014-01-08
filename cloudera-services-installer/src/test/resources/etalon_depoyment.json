@@ -1,0 +1,305 @@
+{
+    "timestamp" : "2014-01-08T16:40:21.650Z",
+    "clusters" : [ {
+        "name" : "cloudera-cluster",
+        "version" : "CDH4",
+        "services" : [ {
+            "name" : "hdfs1",
+            "type" : "HDFS",
+            "config" : {
+                "items" : [ {
+                    "name" : "dfs_ha_fencing_cloudera_manager_secret_key",
+                    "value" : "MySh6I1AU86Ud3plY92L7Kt3KzU4ZR"
+                }, {
+                    "name" : "fc_authorization_secret_key",
+                    "value" : "t8dTuEol4XF7s5lg0pba1xsE2yRukC"
+                }, {
+                    "name" : "http_auth_signature_secret",
+                    "value" : "9zHwv2cBPEDDE1nkNNq4tdlEKTY7nB"
+                } ]
+            },
+            "roles" : [ {
+                "name" : "hdfs1-DATANODE-ae52f58d1e6d2dfcbbf7d350f3349253",
+                "type" : "DATANODE",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node3.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                }
+            }, {
+                "name" : "hdfs1-DATANODE-c4c3e7c48836effbfc46d263cd910527",
+                "type" : "DATANODE",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                }
+            }, {
+                "name" : "hdfs1-DATANODE-e3739e0690012c74aff42910c815f0eb",
+                "type" : "DATANODE",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                }
+            }, {
+                "name" : "hdfs1-NAMENODE-e3739e0690012c74aff42910c815f0eb",
+                "type" : "NAMENODE",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "hdfs1-NAMENODE-BASE"
+                }
+            }, {
+                "name" : "hdfs1-SECONDARYNAMENODE-e3739e0690012c74aff42910c815f0eb",
+                "type" : "SECONDARYNAMENODE",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "hdfs1-SECONDARYNAMENODE-BASE"
+                }
+            } ],
+            "displayName" : "hdfs1",
+            "roleConfigGroups" : [ {
+                "name" : "hdfs1-BALANCER-BASE",
+                "displayName" : "Balancer (Default)",
+                "roleType" : "BALANCER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ ]
+                }
+            }, {
+                "name" : "hdfs1-DATANODE-BASE",
+                "displayName" : "DataNode (Default)",
+                "roleType" : "DATANODE",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "datanode_java_heapsize",
+                        "value" : "803871507"
+                    }, {
+                        "name" : "dfs_data_dir_list",
+                        "value" : "/dfs/dn"
+                    }, {
+                        "name" : "dfs_datanode_du_reserved",
+                        "value" : "898763571"
+                    } ]
+                }
+            }, {
+                "name" : "hdfs1-FAILOVERCONTROLLER-BASE",
+                "displayName" : "Failover Controller (Default)",
+                "roleType" : "FAILOVERCONTROLLER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ ]
+                }
+            }, {
+                "name" : "hdfs1-GATEWAY-BASE",
+                "displayName" : "Gateway (Default)",
+                "roleType" : "GATEWAY",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "dfs_client_use_trash",
+                        "value" : "true"
+                    } ]
+                }
+            }, {
+                "name" : "hdfs1-HTTPFS-BASE",
+                "displayName" : "HttpFS (Default)",
+                "roleType" : "HTTPFS",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ ]
+                }
+            }, {
+                "name" : "hdfs1-JOURNALNODE-BASE",
+                "displayName" : "JournalNode (Default)",
+                "roleType" : "JOURNALNODE",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ ]
+                }
+            }, {
+                "name" : "hdfs1-NAMENODE-BASE",
+                "displayName" : "NameNode (Default)",
+                "roleType" : "NAMENODE",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "dfs_name_dir_list",
+                        "value" : "/dfs/nn"
+                    }, {
+                        "name" : "dfs_namenode_servicerpc_address",
+                        "value" : "8022"
+                    }, {
+                        "name" : "namenode_java_heapsize",
+                        "value" : "267957169"
+                    } ]
+                }
+            }, {
+                "name" : "hdfs1-SECONDARYNAMENODE-BASE",
+                "displayName" : "SecondaryNameNode (Default)",
+                "roleType" : "SECONDARYNAMENODE",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "hdfs1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "fs_checkpoint_dir_list",
+                        "value" : "/dfs/snn"
+                    }, {
+                        "name" : "secondary_namenode_java_heapsize",
+                        "value" : "267957169"
+                    } ]
+                }
+            } ]
+        } ],
+        "parcels" : [ {
+            "product" : "IMPALA",
+            "version" : "1.2.3-1.p0.97",
+            "stage" : "DISTRIBUTED",
+            "clusterRef" : {
+                "clusterName" : "cloudera-cluster"
+            }
+        }, {
+            "product" : "CDH",
+            "version" : "4.5.0-1.cdh4.5.0.p0.30",
+            "stage" : "DISTRIBUTED",
+            "clusterRef" : {
+                "clusterName" : "cloudera-cluster"
+            }
+        }, {
+            "product" : "IMPALA",
+            "version" : "1.2.3-1.p0.97",
+            "stage" : "ACTIVATED",
+            "clusterRef" : {
+                "clusterName" : "cloudera-cluster"
+            }
+        }, {
+            "product" : "CDH",
+            "version" : "4.5.0-1.cdh4.5.0.p0.30",
+            "stage" : "ACTIVATED",
+            "clusterRef" : {
+                "clusterName" : "cloudera-cluster"
+            }
+        } ]
+    } ],
+    "hosts" : [ {
+        "hostId" : "vm-cluster-node1.localdomain",
+        "ipAddress" : "10.211.55.101",
+        "hostname" : "vm-cluster-node1.localdomain",
+        "rackId" : "/default",
+        "config" : {
+            "items" : [ ]
+        }
+    }, {
+        "hostId" : "vm-cluster-node2.localdomain",
+        "ipAddress" : "10.211.55.102",
+        "hostname" : "vm-cluster-node2.localdomain",
+        "rackId" : "/default",
+        "config" : {
+            "items" : [ ]
+        }
+    }, {
+        "hostId" : "vm-cluster-node3.localdomain",
+        "ipAddress" : "10.211.55.103",
+        "hostname" : "vm-cluster-node3.localdomain",
+        "rackId" : "/default",
+        "config" : {
+            "items" : [ ]
+        }
+    } ],
+    "users" : [ {
+        "name" : "admin",
+        "roles" : [ "ROLE_ADMIN" ],
+        "pwHash" : "f570c8c9467f4eab8974a1e4927466e9d6f7b5b98122be14de6170d1610f1383",
+        "pwSalt" : -1120292342220520548,
+        "pwLogin" : true
+    } ],
+    "versionInfo" : {
+        "version" : "4.8.0",
+        "buildUser" : "jenkins",
+        "buildTimestamp" : "20131125-1015",
+        "gitHash" : "48c25adb872f94de22b61868e82700217853b60e",
+        "snapshot" : false
+    },
+    "managerSettings" : {
+        "items" : [ {
+            "name" : "CLUSTER_STATS_START",
+            "value" : "10/25/2012 9:30"
+        }, {
+            "name" : "DISTRIBUTE_PARCELS_AUTOMATICALLY",
+            "value" : "false"
+        }, {
+            "name" : "DOWNLOAD_PARCELS_AUTOMATICALLY",
+            "value" : "false"
+        }, {
+            "name" : "ENABLE_API_DEBUG",
+            "value" : "true"
+        }, {
+            "name" : "PARCEL_AUTODOWNLOAD_PRODUCTS",
+            "value" : "CDH,IMPALA"
+        }, {
+            "name" : "PUBLIC_CLOUD_STATUS",
+            "value" : "NOT_ON_PUBLIC_CLOUD"
+        }, {
+            "name" : "REMOTE_PARCEL_REPO_URLS",
+            "value" : "http://archive.cloudera.com/cdh4/parcels/4.5.0.30/,http://archive.cloudera.com/impala/parcels/1.2.3.97/"
+        } ]
+    },
+    "allHostsConfig" : {
+        "items" : [ ]
+    },
+    "peers" : [ ]
+}

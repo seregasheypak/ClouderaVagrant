@@ -1,4 +1,7 @@
 package cloudera.services.installer
+
+import cloudera.services.installer.model.Cluster
+import cloudera.services.installer.model.HDFS
 /**
  * User: sergey.sheypak
  * Date: 29.12.13
@@ -8,18 +11,23 @@ class Main {
 
     public static void main(String... args){
         new Executor().configureScm()
+                      .stopCluster()
                       .deleteCluster()
                       .createCluster()
                       .addHosts()
                       .activateParcels()
-                      //.createHDFS()
+                      .createHDFS()
+//        def root = new Executor().createRoot()
+//        def hdfs =  root.clustersResource.getServicesResource(Cluster.name).readService('hdfs1')
+//        println hdfs
+//
+//        def roles = root.clustersResource.getServicesResource(Cluster.name).getRolesResource('hdfs1').readRoles()
+//        roles.each {
+//            println 'role ::: ' + it
+//        }
 
-//            println new ClouderaManagerClientBuilder()
-//                    .withHost(System.getProperty('scm.host', 'napoleon1.desert.ru'))
-//                    .withUsernamePassword(System.getProperty('scm.username', 'ssa'),
-//                    System.getProperty('scm.password', 'shu3EoXo'))
-//                    .build()
-//                    .getRootV5().clustersResource.getServicesResource('Cluster 1 - CDH4').readServices(DataView.EXPORT)
+
+
     }
 
 }

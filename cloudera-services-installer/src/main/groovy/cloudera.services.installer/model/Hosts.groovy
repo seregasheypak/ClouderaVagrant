@@ -16,18 +16,13 @@ class Hosts implements BuiltModel{
     public static final String HOST_02 = 'vm-cluster-node2.localdomain'
     public static final String HOST_03 = 'vm-cluster-node3.localdomain'
 
-    def hosts = [
+    public static final HOSTS = [
                     [hostname: HOST_01, ipAddress:'10.211.55.101'],
                     [hostname: HOST_02, ipAddress:'10.211.55.102'],
                     [hostname: HOST_03, ipAddress:'10.211.55.103']
                 ]
 
     def build(){
-        new ApiHostList(hosts.collect{ new ApiHost(hostId: it.hostname, hostname: it.hostname, ipAddress: it.ipAddress)})
+        new ApiHostList(HOSTS.collect{ new ApiHost(hostId: it.hostname, hostname: it.hostname, ipAddress: it.ipAddress)})
     }
-
-    def hostRef(String name){
-        new ApiHostRef(hostId: hosts.find{it.hostname == name}.hostname)
-    }
-
 }

@@ -35,13 +35,21 @@ class Executor {
 
     def activateParcels(){
         new ParcelActivator(products: ScmConf.PRODUCTS, root: root, clusterName: Cluster.name).activate()
+        this
     }
 
+    def stopCluster(){
+        def delCommand = root.clustersResource.stopCommand(Cluster.name)
+
+        println delCommand
+
+        println 'status: ' + root.commandsResource.readCommand(delCommand.id)
+        this
+    }
 
     def deleteCluster(){
-        def clusterName = new Cluster().name
-        root.clustersResource.deleteCluster(clusterName)
-        LOG.info "Cluster: $clusterName has been deleted"
+        root.clustersResource.deleteCluster(Cluster.name)
+        LOG.info "Cluster: $Cluster.name has been deleted"
         this
     }
 
