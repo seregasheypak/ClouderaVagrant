@@ -9,6 +9,8 @@ import cloudera.services.installer.model.Cluster
 import cloudera.services.installer.model.ScmConf
 import cloudera.services.installer.model.Hosts
 import cloudera.services.installer.model.HDFS
+import cloudera.services.installer.utility.ParcelActivator
+import cloudera.services.installer.model.ClusterHosts
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -21,7 +23,6 @@ import org.slf4j.LoggerFactory
 class Executor {
 
     private static final Logger LOG = LoggerFactory.getLogger(Executor.class)
-    public static final long SECOND = 1000L
 
     private final RootResourceV5 root = createRoot()
 
@@ -32,16 +33,8 @@ class Executor {
         this
     }
 
-    def waitForParcelActivation(){
-        ScmConf.PRODUCTS.each {product ->
-            println "Starting download a product: $product"
-            root.getClustersResource().getParcelsResource(Cluster.name).getParcelResource(product.name, product.version).startDownloadCommand()
-
-            def parcelStatusList = root.getClustersResource().getParcelsResource(Cluster.name).readParcels(DataView.SUMMARY)
-            parcelStatusList.each { status ->
-                status.stage
-            }
-        }
+    def activateParcels(){
+        new ParcelActivator(products: ScmConf.PRODUCTS, root: root, clusterName: Cluster.name).activate()
     }
 
 
@@ -72,12 +65,19 @@ class Executor {
         newHosts.hosts.removeAll{ newHost ->
             existingHosts.find{ existingHost -> existingHost.hostId == newHost.hostId }
         }
+
+
         if(!newHosts.hosts.isEmpty()){
             LOG.info "Creating hosts: " + newHosts.hosts.collect{it.hostId}.join(' ')
             root.hostsResource.createHosts(newHosts)
         }else{
-            LOG.info 'All hosts are in cluster'
+            LOG.info 'All hosts are registered'
         }
+
+        println 'root.clustersResource.listHosts(Cluster.name)::: ' + root.clustersResource.listHosts(Cluster.name)
+        def hosts = root.clustersResource.addHosts(Cluster.name, new ClusterHosts().build())
+        println hosts
+        LOG.info 'Hosts have been added to cluster'
         this
     }
 

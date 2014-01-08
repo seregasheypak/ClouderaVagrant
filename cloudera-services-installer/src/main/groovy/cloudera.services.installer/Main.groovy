@@ -11,7 +11,7 @@ class Main {
                       .deleteCluster()
                       .createCluster()
                       .addHosts()
-                      .waitForParcelActivation()
+                      .activateParcels()
                       //.createHDFS()
 
 //            println new ClouderaManagerClientBuilder()

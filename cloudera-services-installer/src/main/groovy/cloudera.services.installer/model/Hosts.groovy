@@ -13,8 +13,8 @@ import com.cloudera.api.model.ApiHostRef
 class Hosts implements BuiltModel{
 
     public static final String HOST_01 = 'vm-cluster-node1.localdomain'
-    public static final String HOST_02 = 'vm-cluster-node1.localdomain'
-    public static final String HOST_03 = 'vm-cluster-node1.localdomain'
+    public static final String HOST_02 = 'vm-cluster-node2.localdomain'
+    public static final String HOST_03 = 'vm-cluster-node3.localdomain'
 
     def hosts = [
                     [hostname: HOST_01, ipAddress:'10.211.55.101'],
