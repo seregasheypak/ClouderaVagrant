@@ -2,8 +2,6 @@ package cloudera.services.installer.model
 
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
-import com.cloudera.api.model.ApiHostRef
-
 
 /**
  * User: sergey.sheypak

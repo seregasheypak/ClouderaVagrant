@@ -1,7 +1,4 @@
 package cloudera.services.installer
-
-import cloudera.services.installer.model.Cluster
-import cloudera.services.installer.model.HDFS
 /**
  * User: sergey.sheypak
  * Date: 29.12.13

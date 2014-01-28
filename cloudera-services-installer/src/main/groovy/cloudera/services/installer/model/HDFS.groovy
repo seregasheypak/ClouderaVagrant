@@ -7,9 +7,7 @@ import com.cloudera.api.model.ApiRole
 import com.cloudera.api.model.ApiRoleConfigGroup
 import com.cloudera.api.model.ApiRoleConfigGroupList
 import com.cloudera.api.model.ApiRoleConfigGroupRef
-import com.cloudera.api.model.ApiRoleList
 import com.cloudera.api.model.ApiService
-import com.cloudera.api.model.ApiServiceConfig
 import com.cloudera.api.model.ApiServiceList
 import com.cloudera.api.model.ApiServiceRef
 
