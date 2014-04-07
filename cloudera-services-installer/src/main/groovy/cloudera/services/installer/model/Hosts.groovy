@@ -23,4 +23,8 @@ class Hosts implements BuiltModel{
     def build(){
         new ApiHostList(HOSTS.collect{ new ApiHost(hostId: it.hostname, hostname: it.hostname, ipAddress: it.ipAddress)})
     }
+
+    static asRoleNameSuffix(String hostName){
+        hostName.replace('.', '_').replace('-','')
+    }
 }

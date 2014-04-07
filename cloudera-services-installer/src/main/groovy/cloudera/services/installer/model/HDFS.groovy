@@ -1,16 +1,5 @@
 package cloudera.services.installer.model
-
-import com.cloudera.api.model.ApiConfig
-import com.cloudera.api.model.ApiConfigList
-import com.cloudera.api.model.ApiHostRef
-import com.cloudera.api.model.ApiRole
-import com.cloudera.api.model.ApiRoleConfigGroup
-import com.cloudera.api.model.ApiRoleConfigGroupList
-import com.cloudera.api.model.ApiRoleConfigGroupRef
-import com.cloudera.api.model.ApiService
-import com.cloudera.api.model.ApiServiceList
-import com.cloudera.api.model.ApiServiceRef
-
+import com.cloudera.api.model.*
 /**
  * User: sergey.sheypak
  * Date: 29.12.13
@@ -24,8 +13,9 @@ class HDFS implements BuiltModel{
     public static final String NAMENODE = 'NAMENODE'
     public static final String SECONDARYNAMENODE = 'SECONDARYNAMENODE'
     public static final String DATANODE = 'DATANODE'
+    public static final String GATEWAY = 'GATEWAY'
 
-    public static final int HEAP_SIZE_128_MB = 134217728
+    public static final int HEAP_SIZE_128_MB = 134_217_728
     public static final int HEAP_SIZE_256_MB = HEAP_SIZE_128_MB * 2
 
 
@@ -40,35 +30,38 @@ class HDFS implements BuiltModel{
 
 
         def roleList = []
+
         Hosts.HOSTS.each { host ->
+            //add DATANODE for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:DataNodeConfigGroup.NAME),
                                      hostRef:            new ApiHostRef(hostId: host.hostname),
-                                     name:               "$DATANODE-$host.hostname",
+                                     name:               "$DATANODE-${Hosts.asRoleNameSuffix(host.hostname)}",
                                      type:               DATANODE
             )
+            //add HDFS Gateway for each host
+            roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:HDFSGatewayConfigGroup.NAME),
+                    hostRef:            new ApiHostRef(hostId: host.hostname),
+                    name:               "$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
+                    type:               GATEWAY
+            )
         }
+        //add NN
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: NameNodeConfigGroup.NAME),
                                   hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                                  name:               "$NAMENODE-$Hosts.HOST_01",
+                                  name:               "$NAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
                                   type:               NAMENODE
                 )
 
+        //add SNN
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: SecondaryNameNodeConfigGroup.NAME),
                                   hostRef:            new ApiHostRef(hostId: Hosts.HOST_02),
-                                  name:               "$SECONDARYNAMENODE-$Hosts.HOST_02",
+                                  name:               "$SECONDARYNAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
                                   type:               SECONDARYNAMENODE
         )
-        hdfsService.roleConfigGroups = [new DataNodeConfigGroup().build(), new NameNodeConfigGroup().build(), new SecondaryNameNodeConfigGroup().build()]
+
+        hdfsService.roleConfigGroups = [new DataNodeConfigGroup().build(), new NameNodeConfigGroup().build(), new SecondaryNameNodeConfigGroup().build(), new HDFSGatewayConfigGroup().build()]
         hdfsService.roles = roleList
         new ApiServiceList(services: [hdfsService])
-    }
-
-
-    static class HDFSConfigGroups implements BuiltModel{
-
-        def build(){
-            new ApiRoleConfigGroupList([new DataNodeConfigGroup().build(), new NameNodeConfigGroup().build(), new SecondaryNameNodeConfigGroup().build()])
-        }
     }
 
     static class DataNodeConfigGroup implements BuiltModel{
@@ -77,6 +70,7 @@ class HDFS implements BuiltModel{
         public static final String DATANODE_JAVA_HEAPSIZE = 'datanode_java_heapsize'
         public static final String DFS_DATA_DIR_LIST = 'dfs_data_dir_list'
 
+        @Override
         def build() {
             def configGroup = new ApiRoleConfigGroup()
             configGroup.base = true
@@ -91,6 +85,24 @@ class HDFS implements BuiltModel{
         }
     }
 
+    static class HDFSGatewayConfigGroup implements BuiltModel{
+
+        public static final String NAME = "$SERVICE_NAME-$GATEWAY-BASE"
+
+        @Override
+        def build() {
+            def configGroup = new ApiRoleConfigGroup()
+            configGroup.base = true
+            configGroup.roleType = GATEWAY
+            configGroup.name = NAME
+            configGroup.displayName = "$GATEWAY (Default)"
+            configGroup.serviceRef = new ApiServiceRef(clusterName: Cluster.name, serviceName: SERVICE_NAME)
+            configGroup.config = new ApiConfigList([new ApiConfig(name: 'dfs_client_use_trash', value: 'true')
+            ])
+            configGroup
+        }
+    }
+
     static class SecondaryNameNodeConfigGroup implements BuiltModel{
 
         public static final String NAME = "$SERVICE_NAME-$SECONDARYNAMENODE-BASE"
@@ -98,6 +110,7 @@ class HDFS implements BuiltModel{
         public static final String FS_CHECKPOINT_DIR_LIST = 'fs_checkpoint_dir_list'
         public static final String SECONDARY_NAMENODE_JAVA_HEAPSIZE = 'secondary_namenode_java_heapsize'
 
+        @Override
         def build() {
             def configGroup = new ApiRoleConfigGroup()
             configGroup.base = true
@@ -121,6 +134,7 @@ class HDFS implements BuiltModel{
         public static final String NAMENODE_JAVA_HEAPSIZE = 'namenode_java_heapsize'
         public static final String DFS_NAMENODE_SERVICERPC_ADDRESS = 'dfs_namenode_servicerpc_address'
 
+        @Override
         def build() {
             def configGroup = new ApiRoleConfigGroup()
             configGroup.base = true
