@@ -1,5 +1,5 @@
 {
-    "timestamp" : "2014-04-07T18:55:36.265Z",
+    "timestamp" : "2014-04-07T19:21:01.211Z",
     "clusters" : [ {
         "name" : "cloudera-cluster",
         "version" : "CDH4",
@@ -9,13 +9,13 @@
             "config" : {
                 "items" : [ {
                     "name" : "dfs_ha_fencing_cloudera_manager_secret_key",
-                    "value" : "hnvs2bDfctv7tbkcn3gRbYYPsBJXN8"
+                    "value" : "weo55WyeH3UybONJ7o7BSDPsPb1Uh2"
                 }, {
                     "name" : "fc_authorization_secret_key",
-                    "value" : "LS67ejdWRhk0sCrlIJlkY4rnXQhaG7"
+                    "value" : "N4TrxpjuSG8w7DcYLno3w5qUGLMyVX"
                 }, {
                     "name" : "http_auth_signature_secret",
-                    "value" : "LeWCGQuAy7YyyZjpZehOrVNiEGmpre"
+                    "value" : "sR7WqYVdU2D9zLlwLqB0SKJKxFJ8Bu"
                 } ]
             },
             "roles" : [ {
@@ -53,6 +53,42 @@
                 },
                 "roleConfigGroupRef" : {
                     "roleConfigGroupName" : "HDFS01-DATANODE-BASE"
+                }
+            }, {
+                "name" : "GATEWAY-vmclusternode1_localdomain",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "HDFS01-GATEWAY-BASE"
+                }
+            }, {
+                "name" : "GATEWAY-vmclusternode2_localdomain",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "HDFS01-GATEWAY-BASE"
+                }
+            }, {
+                "name" : "GATEWAY-vmclusternode3_localdomain",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node3.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "HDFS01-GATEWAY-BASE"
                 }
             }, {
                 "name" : "NAMENODE-vmclusternode1_localdomain",
@@ -198,6 +234,228 @@
                     }, {
                         "name" : "secondary_namenode_java_heapsize",
                         "value" : "268435456"
+                    } ]
+                }
+            } ]
+        }, {
+            "name" : "mapreduce1",
+            "type" : "MAPREDUCE",
+            "config" : {
+                "items" : [ {
+                    "name" : "hdfs_service",
+                    "value" : "HDFS01"
+                } ]
+            },
+            "roles" : [ {
+                "name" : "mapreduce1-GATEWAY-ae52f58d1e6d2dfcbbf7d350f3349253",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node3.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-GATEWAY-BASE"
+                }
+            }, {
+                "name" : "mapreduce1-GATEWAY-c4c3e7c48836effbfc46d263cd910527",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-GATEWAY-BASE"
+                }
+            }, {
+                "name" : "mapreduce1-GATEWAY-e3739e0690012c74aff42910c815f0eb",
+                "type" : "GATEWAY",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-GATEWAY-BASE"
+                }
+            }, {
+                "name" : "mapreduce1-JOBTRACKER-c4c3e7c48836effbfc46d263cd910527",
+                "type" : "JOBTRACKER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-JOBTRACKER-BASE"
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-ae52f58d1e6d2dfcbbf7d350f3349253",
+                "type" : "TASKTRACKER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node3.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-TASKTRACKER-BASE"
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-c4c3e7c48836effbfc46d263cd910527",
+                "type" : "TASKTRACKER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-TASKTRACKER-1"
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-e3739e0690012c74aff42910c815f0eb",
+                "type" : "TASKTRACKER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "mapreduce1-TASKTRACKER-2"
+                }
+            } ],
+            "displayName" : "mapreduce1",
+            "roleConfigGroups" : [ {
+                "name" : "mapreduce1-FAILOVERCONTROLLER-BASE",
+                "displayName" : "Failover Controller (Default)",
+                "roleType" : "FAILOVERCONTROLLER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ ]
+                }
+            }, {
+                "name" : "mapreduce1-GATEWAY-BASE",
+                "displayName" : "Gateway (Default)",
+                "roleType" : "GATEWAY",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "io_sort_mb",
+                        "value" : "50"
+                    }, {
+                        "name" : "mapred_child_java_opts_max_heap",
+                        "value" : "133978584"
+                    }, {
+                        "name" : "mapred_submit_replication",
+                        "value" : "1"
+                    } ]
+                }
+            }, {
+                "name" : "mapreduce1-JOBTRACKER-BASE",
+                "displayName" : "JobTracker (Default)",
+                "roleType" : "JOBTRACKER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "jobtracker_java_heapsize",
+                        "value" : "133978584"
+                    }, {
+                        "name" : "jobtracker_mapred_local_dir_list",
+                        "value" : "/mapred/jt"
+                    }, {
+                        "name" : "mapred_job_tracker_handler_count",
+                        "value" : "22"
+                    } ]
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-1",
+                "displayName" : "TaskTracker (1)",
+                "roleType" : "TASKTRACKER",
+                "base" : false,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "mapred_tasktracker_map_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "mapred_tasktracker_reduce_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "task_tracker_java_heapsize",
+                        "value" : "133978584"
+                    }, {
+                        "name" : "tasktracker_mapred_local_dir_list",
+                        "value" : "/mapred/local"
+                    } ]
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-2",
+                "displayName" : "TaskTracker (2)",
+                "roleType" : "TASKTRACKER",
+                "base" : false,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "mapred_tasktracker_map_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "mapred_tasktracker_reduce_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "task_tracker_java_heapsize",
+                        "value" : "160774301"
+                    }, {
+                        "name" : "tasktracker_mapred_local_dir_list",
+                        "value" : "/mapred/local"
+                    } ]
+                }
+            }, {
+                "name" : "mapreduce1-TASKTRACKER-BASE",
+                "displayName" : "TaskTracker (Default)",
+                "roleType" : "TASKTRACKER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "mapreduce1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "mapred_tasktracker_map_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "mapred_tasktracker_reduce_tasks_maximum",
+                        "value" : "1"
+                    }, {
+                        "name" : "task_tracker_java_heapsize",
+                        "value" : "200967876"
+                    }, {
+                        "name" : "tasktracker_mapred_local_dir_list",
+                        "value" : "/mapred/local"
                     } ]
                 }
             } ]
