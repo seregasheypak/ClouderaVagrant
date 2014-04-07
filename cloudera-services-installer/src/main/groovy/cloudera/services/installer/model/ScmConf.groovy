@@ -25,7 +25,7 @@ class ScmConf implements BuiltModel{
 
     def getRemoteParcelsRepo(){
         new ApiConfig(name: 'remote_parcel_repo_urls',
-                      value: 'http://archive.cloudera.com/cdh4/parcels/4.5.0.30/,http://archive.cloudera.com/impala/parcels/1.2.3.97/')
+                      value: 'http://archive.cloudera.com/cdh4/parcels/4.6.0.26/,http://archive.cloudera.com/impala/parcels/1.2.4/')
     }
 
     def getAutomaticalyDownloadedProducts(){
