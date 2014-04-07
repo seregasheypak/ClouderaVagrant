@@ -59,7 +59,10 @@ class HDFS implements BuiltModel{
                                   type:               SECONDARYNAMENODE
         )
 
-        hdfsService.roleConfigGroups = [new DataNodeConfigGroup().build(), new NameNodeConfigGroup().build(), new SecondaryNameNodeConfigGroup().build(), new HDFSGatewayConfigGroup().build()]
+        hdfsService.roleConfigGroups = [new DataNodeConfigGroup().build(),
+                                        new NameNodeConfigGroup().build(),
+                                        new SecondaryNameNodeConfigGroup().build(),
+                                        new HDFSGatewayConfigGroup().build()]
         hdfsService.roles = roleList
         new ApiServiceList(services: [hdfsService])
     }
