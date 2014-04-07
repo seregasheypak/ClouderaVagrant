@@ -1,37 +1,37 @@
 {
-    "timestamp" : "2014-01-08T16:40:21.650Z",
+    "timestamp" : "2014-04-07T18:55:36.265Z",
     "clusters" : [ {
         "name" : "cloudera-cluster",
         "version" : "CDH4",
         "services" : [ {
-            "name" : "hdfs1",
+            "name" : "HDFS01",
             "type" : "HDFS",
             "config" : {
                 "items" : [ {
                     "name" : "dfs_ha_fencing_cloudera_manager_secret_key",
-                    "value" : "MySh6I1AU86Ud3plY92L7Kt3KzU4ZR"
+                    "value" : "hnvs2bDfctv7tbkcn3gRbYYPsBJXN8"
                 }, {
                     "name" : "fc_authorization_secret_key",
-                    "value" : "t8dTuEol4XF7s5lg0pba1xsE2yRukC"
+                    "value" : "LS67ejdWRhk0sCrlIJlkY4rnXQhaG7"
                 }, {
                     "name" : "http_auth_signature_secret",
-                    "value" : "9zHwv2cBPEDDE1nkNNq4tdlEKTY7nB"
+                    "value" : "LeWCGQuAy7YyyZjpZehOrVNiEGmpre"
                 } ]
             },
             "roles" : [ {
-                "name" : "hdfs1-DATANODE-ae52f58d1e6d2dfcbbf7d350f3349253",
+                "name" : "DATANODE-vmclusternode1_localdomain",
                 "type" : "DATANODE",
                 "hostRef" : {
-                    "hostId" : "vm-cluster-node3.localdomain"
+                    "hostId" : "vm-cluster-node1.localdomain"
                 },
                 "config" : {
                     "items" : [ ]
                 },
                 "roleConfigGroupRef" : {
-                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                    "roleConfigGroupName" : "HDFS01-DATANODE-BASE"
                 }
             }, {
-                "name" : "hdfs1-DATANODE-c4c3e7c48836effbfc46d263cd910527",
+                "name" : "DATANODE-vmclusternode2_localdomain",
                 "type" : "DATANODE",
                 "hostRef" : {
                     "hostId" : "vm-cluster-node2.localdomain"
@@ -40,22 +40,22 @@
                     "items" : [ ]
                 },
                 "roleConfigGroupRef" : {
-                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                    "roleConfigGroupName" : "HDFS01-DATANODE-BASE"
                 }
             }, {
-                "name" : "hdfs1-DATANODE-e3739e0690012c74aff42910c815f0eb",
+                "name" : "DATANODE-vmclusternode3_localdomain",
                 "type" : "DATANODE",
                 "hostRef" : {
-                    "hostId" : "vm-cluster-node1.localdomain"
+                    "hostId" : "vm-cluster-node3.localdomain"
                 },
                 "config" : {
                     "items" : [ ]
                 },
                 "roleConfigGroupRef" : {
-                    "roleConfigGroupName" : "hdfs1-DATANODE-BASE"
+                    "roleConfigGroupName" : "HDFS01-DATANODE-BASE"
                 }
             }, {
-                "name" : "hdfs1-NAMENODE-e3739e0690012c74aff42910c815f0eb",
+                "name" : "NAMENODE-vmclusternode1_localdomain",
                 "type" : "NAMENODE",
                 "hostRef" : {
                     "hostId" : "vm-cluster-node1.localdomain"
@@ -64,75 +64,72 @@
                     "items" : [ ]
                 },
                 "roleConfigGroupRef" : {
-                    "roleConfigGroupName" : "hdfs1-NAMENODE-BASE"
+                    "roleConfigGroupName" : "HDFS01-NAMENODE-BASE"
                 }
             }, {
-                "name" : "hdfs1-SECONDARYNAMENODE-e3739e0690012c74aff42910c815f0eb",
+                "name" : "SECONDARYNAMENODE-vmclusternode2_localdomain",
                 "type" : "SECONDARYNAMENODE",
                 "hostRef" : {
-                    "hostId" : "vm-cluster-node1.localdomain"
+                    "hostId" : "vm-cluster-node2.localdomain"
                 },
                 "config" : {
                     "items" : [ ]
                 },
                 "roleConfigGroupRef" : {
-                    "roleConfigGroupName" : "hdfs1-SECONDARYNAMENODE-BASE"
+                    "roleConfigGroupName" : "HDFS01-SECONDARYNAMENODE-BASE"
                 }
             } ],
-            "displayName" : "hdfs1",
+            "displayName" : "HDFS01",
             "roleConfigGroups" : [ {
-                "name" : "hdfs1-BALANCER-BASE",
+                "name" : "HDFS01-BALANCER-BASE",
                 "displayName" : "Balancer (Default)",
                 "roleType" : "BALANCER",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ ]
                 }
             }, {
-                "name" : "hdfs1-DATANODE-BASE",
+                "name" : "HDFS01-DATANODE-BASE",
                 "displayName" : "DataNode (Default)",
                 "roleType" : "DATANODE",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ {
                         "name" : "datanode_java_heapsize",
-                        "value" : "803871507"
+                        "value" : "134217728"
                     }, {
                         "name" : "dfs_data_dir_list",
                         "value" : "/dfs/dn"
-                    }, {
-                        "name" : "dfs_datanode_du_reserved",
-                        "value" : "898763571"
                     } ]
                 }
             }, {
-                "name" : "hdfs1-FAILOVERCONTROLLER-BASE",
+                "name" : "HDFS01-FAILOVERCONTROLLER-BASE",
                 "displayName" : "Failover Controller (Default)",
                 "roleType" : "FAILOVERCONTROLLER",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ ]
                 }
             }, {
-                "name" : "hdfs1-GATEWAY-BASE",
+                "name" : "HDFS01-GATEWAY-BASE",
                 "displayName" : "Gateway (Default)",
                 "roleType" : "GATEWAY",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ {
@@ -141,37 +138,37 @@
                     } ]
                 }
             }, {
-                "name" : "hdfs1-HTTPFS-BASE",
+                "name" : "HDFS01-HTTPFS-BASE",
                 "displayName" : "HttpFS (Default)",
                 "roleType" : "HTTPFS",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ ]
                 }
             }, {
-                "name" : "hdfs1-JOURNALNODE-BASE",
+                "name" : "HDFS01-JOURNALNODE-BASE",
                 "displayName" : "JournalNode (Default)",
                 "roleType" : "JOURNALNODE",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ ]
                 }
             }, {
-                "name" : "hdfs1-NAMENODE-BASE",
+                "name" : "HDFS01-NAMENODE-BASE",
                 "displayName" : "NameNode (Default)",
                 "roleType" : "NAMENODE",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ {
@@ -182,17 +179,17 @@
                         "value" : "8022"
                     }, {
                         "name" : "namenode_java_heapsize",
-                        "value" : "267957169"
+                        "value" : "268435456"
                     } ]
                 }
             }, {
-                "name" : "hdfs1-SECONDARYNAMENODE-BASE",
+                "name" : "HDFS01-SECONDARYNAMENODE-BASE",
                 "displayName" : "SecondaryNameNode (Default)",
                 "roleType" : "SECONDARYNAMENODE",
                 "base" : true,
                 "serviceRef" : {
                     "clusterName" : "cloudera-cluster",
-                    "serviceName" : "hdfs1"
+                    "serviceName" : "HDFS01"
                 },
                 "config" : {
                     "items" : [ {
@@ -200,35 +197,35 @@
                         "value" : "/dfs/snn"
                     }, {
                         "name" : "secondary_namenode_java_heapsize",
-                        "value" : "267957169"
+                        "value" : "268435456"
                     } ]
                 }
             } ]
         } ],
         "parcels" : [ {
+            "product" : "CDH",
+            "version" : "4.6.0-1.cdh4.6.0.p0.26",
+            "stage" : "DISTRIBUTED",
+            "clusterRef" : {
+                "clusterName" : "cloudera-cluster"
+            }
+        }, {
             "product" : "IMPALA",
-            "version" : "1.2.3-1.p0.97",
+            "version" : "1.2.4-1.p0.110",
             "stage" : "DISTRIBUTED",
             "clusterRef" : {
                 "clusterName" : "cloudera-cluster"
             }
         }, {
             "product" : "CDH",
-            "version" : "4.5.0-1.cdh4.5.0.p0.30",
-            "stage" : "DISTRIBUTED",
-            "clusterRef" : {
-                "clusterName" : "cloudera-cluster"
-            }
-        }, {
-            "product" : "IMPALA",
-            "version" : "1.2.3-1.p0.97",
+            "version" : "4.6.0-1.cdh4.6.0.p0.26",
             "stage" : "ACTIVATED",
             "clusterRef" : {
                 "clusterName" : "cloudera-cluster"
             }
         }, {
-            "product" : "CDH",
-            "version" : "4.5.0-1.cdh4.5.0.p0.30",
+            "product" : "IMPALA",
+            "version" : "1.2.4-1.p0.110",
             "stage" : "ACTIVATED",
             "clusterRef" : {
                 "clusterName" : "cloudera-cluster"
@@ -295,7 +292,7 @@
             "value" : "NOT_ON_PUBLIC_CLOUD"
         }, {
             "name" : "REMOTE_PARCEL_REPO_URLS",
-            "value" : "http://archive.cloudera.com/cdh4/parcels/4.5.0.30/,http://archive.cloudera.com/impala/parcels/1.2.3.97/"
+            "value" : "http://archive.cloudera.com/cdh4/parcels/4.6.0.26/,http://archive.cloudera.com/impala/parcels/1.2.4/"
         } ]
     },
     "allHostsConfig" : {
