@@ -1,5 +1,5 @@
 {
-    "timestamp" : "2014-04-07T19:21:01.211Z",
+    "timestamp" : "2014-04-08T19:41:44.194Z",
     "clusters" : [ {
         "name" : "cloudera-cluster",
         "version" : "CDH4",
@@ -456,6 +456,75 @@
                     }, {
                         "name" : "tasktracker_mapred_local_dir_list",
                         "value" : "/mapred/local"
+                    } ]
+                }
+            } ]
+        }, {
+            "name" : "zookeeper1",
+            "type" : "ZOOKEEPER",
+            "config" : {
+                "items" : [ ]
+            },
+            "roles" : [ {
+                "name" : "zookeeper1-SERVER-ae52f58d1e6d2dfcbbf7d350f3349253",
+                "type" : "SERVER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node3.localdomain"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "serverId",
+                        "value" : "1"
+                    } ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "zookeeper1-SERVER-BASE"
+                }
+            }, {
+                "name" : "zookeeper1-SERVER-c4c3e7c48836effbfc46d263cd910527",
+                "type" : "SERVER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node2.localdomain"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "serverId",
+                        "value" : "3"
+                    } ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "zookeeper1-SERVER-BASE"
+                }
+            }, {
+                "name" : "zookeeper1-SERVER-e3739e0690012c74aff42910c815f0eb",
+                "type" : "SERVER",
+                "hostRef" : {
+                    "hostId" : "vm-cluster-node1.localdomain"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "serverId",
+                        "value" : "2"
+                    } ]
+                },
+                "roleConfigGroupRef" : {
+                    "roleConfigGroupName" : "zookeeper1-SERVER-BASE"
+                }
+            } ],
+            "displayName" : "zookeeper1",
+            "roleConfigGroups" : [ {
+                "name" : "zookeeper1-SERVER-BASE",
+                "displayName" : "Server (Default)",
+                "roleType" : "SERVER",
+                "base" : true,
+                "serviceRef" : {
+                    "clusterName" : "cloudera-cluster",
+                    "serviceName" : "zookeeper1"
+                },
+                "config" : {
+                    "items" : [ {
+                        "name" : "zookeeper_server_java_heapsize",
+                        "value" : "160774301"
                     } ]
                 }
             } ]
