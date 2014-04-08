@@ -1,6 +1,7 @@
 package cloudera.services.installer
 
 import cloudera.services.installer.model.MapReduce
+import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
 import com.cloudera.api.model.ApiHostList
@@ -99,6 +100,13 @@ class Executor {
     def createMapReduce(){
         root.clustersResource.getServicesResource(new Cluster().name).createServices(new MapReduce().build())
         LOG.info 'MapReduce service has been created'
+        this
+    }
+
+
+    def createZookeeper(){
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Zookeeper().build())
+        LOG.info 'Zookeeper service has been created'
         this
     }
 

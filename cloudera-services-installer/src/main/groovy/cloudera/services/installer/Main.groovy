@@ -7,14 +7,16 @@ package cloudera.services.installer
 class Main {
 
     public static void main(String... args){
-        new Executor().configureScm()
-                      .stopCluster()
+        new Executor()
+                    .configureScm()
+                     .stopCluster()
                       .deleteCluster()
                       .createCluster()
                       .addHosts()
                       .activateParcels()
                       .createHDFS()
                       .createMapReduce()
+                    .createZookeeper()
     }
 
 }
