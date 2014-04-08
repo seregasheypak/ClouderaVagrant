@@ -1,5 +1,6 @@
 package cloudera.services.installer
 
+import cloudera.services.installer.model.MapReduce
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
 import com.cloudera.api.model.ApiHostList
@@ -92,6 +93,12 @@ class Executor {
     def createHDFS(){
         root.clustersResource.getServicesResource(new Cluster().name).createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
+        this
+    }
+
+    def createMapReduce(){
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new MapReduce().build())
+        LOG.info 'MapReduce service has been created'
         this
     }
 
