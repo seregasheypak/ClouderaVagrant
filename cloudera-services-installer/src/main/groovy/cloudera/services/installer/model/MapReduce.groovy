@@ -46,7 +46,7 @@ class MapReduce implements BuiltModel{
             //add MapReduce Gateway for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:MapReduceGatewayConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
-                    name:               "$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
+                    name:               "$SERVICE_TYPE_NAME$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
                     type:               GATEWAY
             )
         }
@@ -129,7 +129,9 @@ class MapReduce implements BuiltModel{
             configGroup.config = new ApiConfigList([
                     new ApiConfig(name: 'io_sort_mb',                       value: 50),
                     new ApiConfig(name: 'mapred_child_java_opts_max_heap',  value: 133978584),
-                    new ApiConfig(name: 'mapred_submit_replication',        value: 1)
+                    new ApiConfig(name: 'mapred_submit_replication',        value: 1),
+                    new ApiConfig(name: 'mapred_reduce_tasks',              value: 3)
+
             ])
             configGroup
         }

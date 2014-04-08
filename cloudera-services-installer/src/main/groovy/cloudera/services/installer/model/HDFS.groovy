@@ -41,7 +41,7 @@ class HDFS implements BuiltModel{
             //add HDFS Gateway for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:HDFSGatewayConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
-                    name:               "$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
+                    name:               "$SERVICE_TYPE_NAME$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
                     type:               GATEWAY
             )
         }
