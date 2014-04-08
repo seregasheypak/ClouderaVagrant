@@ -32,12 +32,12 @@ class MapReduce implements BuiltModel{
         mrService.displayName = SERVICE_NAME
         mrService.name        = SERVICE_NAME
         mrService.type        = SERVICE_TYPE_NAME
-        mrService.config = createMapReduceApiSerivceConfig()
+        mrService.config = createMapReduceApiServiceConfig()
 
         def roleList = []
 
         Hosts.HOSTS.each { host ->
-            //add TASKTRACKER for each host
+            //add TaskTrackers for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:TaskTrackerConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
                     name:               "$TASKTRACKER-${Hosts.asRoleNameSuffix(host.hostname)}",
@@ -65,7 +65,7 @@ class MapReduce implements BuiltModel{
         new ApiServiceList(services: [mrService])
     }
 
-    static ApiServiceConfig createMapReduceApiSerivceConfig(){
+    static ApiServiceConfig createMapReduceApiServiceConfig(){
         def apiConfig = new ApiServiceConfig()
         apiConfig.add new ApiConfig(name: 'hdfs_service', value: HDFS.SERVICE_NAME)
         apiConfig
