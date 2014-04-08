@@ -14,17 +14,7 @@ class Main {
                       .addHosts()
                       .activateParcels()
                       .createHDFS()
-//        def root = new Executor().createRoot()
-//        def hdfs =  root.clustersResource.getServicesResource(Cluster.name).readService('hdfs1')
-//        println hdfs
-//
-//        def roles = root.clustersResource.getServicesResource(Cluster.name).getRolesResource('hdfs1').readRoles()
-//        roles.each {
-//            println 'role ::: ' + it
-//        }
-
-
-
+                      .createMapReduce()
     }
 
 }
