@@ -36,6 +36,7 @@ class ParcelActivator {
         checkStatus(DOWNLOADING, AVAILABLE_REMOTELY)
     }
 
+    //TODO: use wait method of CommandApi
     boolean checkStatus(String falseStatus, String unexpectedStatus = null){
         for (counter in 1..WAIT_IN_SECONDS){
             sleep(TEN_SECONDS)
