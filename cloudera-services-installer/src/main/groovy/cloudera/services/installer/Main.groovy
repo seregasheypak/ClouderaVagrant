@@ -10,13 +10,13 @@ class Main {
         new Executor()
                     .configureScm()
                      .stopCluster()
-                      .deleteCluster()
-                      .createCluster()
-                      .addHosts()
-                      .activateParcels()
-                      .createHDFS()
-                      .createMapReduce()
-                    .createZookeeper()
+                     .deleteCluster()
+                     .createCluster()
+                     .addHosts()
+                     .activateParcels()
+                     .createHDFS()
+                     .createMapReduce()
+                     .createZookeeper()
     }
 
 }
