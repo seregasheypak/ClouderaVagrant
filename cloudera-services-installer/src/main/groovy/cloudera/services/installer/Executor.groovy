@@ -1,6 +1,9 @@
 package cloudera.services.installer
 
+import cloudera.services.installer.model.HBase
+import cloudera.services.installer.model.Hive
 import cloudera.services.installer.model.MapReduce
+import cloudera.services.installer.model.Oozie
 import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
@@ -29,18 +32,18 @@ class Executor {
     private final RootResourceV5 root = createRoot()
 
 
-    def configureScm(){
+    def configureScm() {
         root.clouderaManagerResource.updateConfig(new ScmConf().build())
         LOG.info 'scm config has been updated'
         this
     }
 
-    def activateParcels(){
+    def activateParcels() {
         new ParcelActivator(products: ScmConf.PRODUCTS, root: root, clusterName: Cluster.name).activate()
         this
     }
 
-    def stopCluster(){
+    def stopCluster() {
         def delCommand = root.clustersResource.stopCommand(Cluster.name)
 
         println delCommand
@@ -49,38 +52,38 @@ class Executor {
         this
     }
 
-    def deleteCluster(){
+    def deleteCluster() {
         root.clustersResource.deleteCluster(Cluster.name)
         LOG.info "Cluster: $Cluster.name has been deleted"
         this
     }
 
-    def createCluster(){
+    def createCluster() {
         def cluster = new Cluster()
-        if(root.clustersResource
-                       .readClusters(DataView.EXPORT)
-                       .find{existingCluster -> existingCluster.name == cluster.name} == null){
+        if (root.clustersResource
+                .readClusters(DataView.EXPORT)
+                .find { existingCluster -> existingCluster.name == cluster.name } == null) {
 
             root.clustersResource.createClusters(cluster.build())
             LOG.info "Cluster with name: $cluster.name has been created"
-        }else{
+        } else {
             LOG.info "Cluster with name: $cluster.name already exisits"
         }
         this
     }
 
-    def addHosts(){
+    def addHosts() {
         ApiHostList existingHosts = root.getHostsResource().readHosts(DataView.EXPORT)
         def newHosts = new Hosts().build()
-        newHosts.hosts.removeAll{ newHost ->
-            existingHosts.find{ existingHost -> existingHost.hostId == newHost.hostId }
+        newHosts.hosts.removeAll { newHost ->
+            existingHosts.find { existingHost -> existingHost.hostId == newHost.hostId }
         }
 
 
-        if(!newHosts.hosts.isEmpty()){
-            LOG.info "Creating hosts: " + newHosts.hosts.collect{it.hostId}.join(' ')
+        if (!newHosts.hosts.isEmpty()) {
+            LOG.info "Creating hosts: " + newHosts.hosts.collect { it.hostId }.join(' ')
             root.hostsResource.createHosts(newHosts)
-        }else{
+        } else {
             LOG.info 'All hosts are registered'
         }
 
@@ -91,20 +94,38 @@ class Executor {
         this
     }
 
-    def createHDFS(){
+    def createHDFS() {
         root.clustersResource.getServicesResource(new Cluster().name).createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
         this
     }
 
-    def createMapReduce(){
+    def createMapReduce() {
         root.clustersResource.getServicesResource(new Cluster().name).createServices(new MapReduce().build())
         LOG.info 'MapReduce service has been created'
         this
     }
 
 
-    def createZookeeper(){
+    def createOozie() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Oozie().build())
+        LOG.info 'Oozie service has been created'
+        this
+    }
+
+    def createHive() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Hive().build())
+        LOG.info 'Hive service has been created'
+        this
+    }
+
+    def createHBase() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new HBase().build())
+        LOG.info 'HBase service has been created'
+        this
+    }
+
+    def createZookeeper() {
         root.clustersResource.getServicesResource(new Cluster().name).createServices(new Zookeeper().build())
         LOG.info 'Zookeeper service has been created'
         this
@@ -113,12 +134,12 @@ class Executor {
 
 
 
-    def createRoot(){
+    def createRoot() {
         new ClouderaManagerClientBuilder()
-                    .withHost(System.getProperty('scm.host', '10.211.55.101'))
-                    .withUsernamePassword(System.getProperty('scm.username', 'admin'),
-                                          System.getProperty('scm.password', 'admin'))
-                    .build()
-                    .getRootV5()
+                .withHost(System.getProperty('scm.host', '10.211.55.101'))
+                .withUsernamePassword(System.getProperty('scm.username', 'admin'),
+                System.getProperty('scm.password', 'admin'))
+                .build()
+                .getRootV5()
     }
 }

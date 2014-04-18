@@ -2,3 +2,5 @@
 .project
 .settings/
 .idea/
+vagrant/.vagrant/
+cloudera-services-installer/target/
