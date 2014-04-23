@@ -37,7 +37,7 @@ class HBase implements BuiltModel {
             //add Gateway for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:GatewayConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
-                    name:               "$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
+                    name:               "$SERVICE_TYPE_NAME$GATEWAY-${Hosts.asRoleNameSuffix(host.hostname)}",
                     type:               GATEWAY
             )
 
@@ -72,7 +72,11 @@ class HBase implements BuiltModel {
                 new RestServerConfigGroup().build(),
         ]
         hbaseService.roles = roleList
-        new ApiServiceList(services: [hbaseService])
+        ApiServiceList services = new ApiServiceList(services: [hbaseService])
+        services.iterator().each {serv ->
+            println serv.toString();
+        }
+        return services
     }
 
     ApiServiceConfig createServiceWideConfig() {
@@ -95,7 +99,7 @@ class HBase implements BuiltModel {
             configGroup.displayName = "$MASTER (Default)"
             configGroup.serviceRef = new ApiServiceRef(clusterName: Cluster.name, serviceName: SERVICE_NAME)
             configGroup.config = new ApiConfigList([
-                    new ApiConfig(name: 'hbase_master_java_heapsize', value: 1030531544),
+//                    new ApiConfig(name: 'hbase_master_java_heapsize', value: 1030531544),
             ])
             return configGroup
         }
@@ -114,7 +118,7 @@ class HBase implements BuiltModel {
             configGroup.displayName = "$REGIONSERVER (Default)"
             configGroup.serviceRef = new ApiServiceRef(clusterName: Cluster.name, serviceName: SERVICE_NAME)
             configGroup.config = new ApiConfigList([
-                    new ApiConfig(name: 'hbase_regionserver_java_heapsize', value: 1030531544),
+//                    new ApiConfig(name: 'hbase_regionserver_java_heapsize', value: 1030531544),
             ])
             return configGroup
         }

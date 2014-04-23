@@ -1,4 +1,7 @@
 package cloudera.services.installer
+
+import javax.ws.rs.BadRequestException
+
 /**
  * User: sergey.sheypak
  * Date: 29.12.13
@@ -8,19 +11,25 @@ class Main {
 
     public static void main(String... args){
 
-        new Executor()
+        try{
+            new Executor()
                     .configureScm()
-                     .stopCluster()
-                     .deleteCluster()
-                     .createCluster()
-                     .addHosts()
-                     .activateParcels()
-                     .createHDFS()
-                     .createMapReduce()
-                     .createOozie()
-                     .createHive()
-                     .createHBase()
-                     .createZookeeper()
+                    .stopCluster()
+                    .deleteCluster()
+                    .createCluster()
+                    .addHosts()
+                    .activateParcels()
+                    .createHDFS()
+                    .createMapReduce()
+                    .createOozie()
+                    .createZookeeper()
+                    .createHBase()
+                    .createHive()
+        }catch(BadRequestException ex){
+
+            ex.printStackTrace()
+        }
+
     }
 
 }

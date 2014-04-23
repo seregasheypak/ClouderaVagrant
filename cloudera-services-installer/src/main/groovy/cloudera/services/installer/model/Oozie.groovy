@@ -38,7 +38,11 @@ class Oozie implements BuiltModel {
 
         oozieService.roleConfigGroups = [new OozieServerConfigGroup().build()]
         oozieService.roles = roleList
-        new ApiServiceList(services: [oozieService])
+        ApiServiceList services = new ApiServiceList(services: [oozieService])
+        services.iterator().each {serv ->
+            println serv.toString();
+        }
+        return services
 
     }
 
