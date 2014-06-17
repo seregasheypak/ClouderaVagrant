@@ -71,7 +71,8 @@ node 'vm-cluster-node1.localdomain' inherits default {
     source => 'puppet:///modules/hadoop/cloudera-services-installer.jar',
   }
   ->
-  exec {'/usr/java/default/java -jar /var/lib/cloudera/cloudera-services-installer.jar':
+  exec {'java -jar /var/lib/cloudera/cloudera-services-installer.jar':
+    path => ['/usr/java/default', '/usr/bin'],
   }
 }
 
