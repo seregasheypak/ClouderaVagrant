@@ -14,8 +14,8 @@ class Main {
         try{
             new Executor()
                     .configureScm()
-                    .stopCluster()
-                    .deleteCluster()
+                    //.stopCluster()
+                    //.deleteCluster()
                     .createCluster()
                     .addHosts()
                     .activateParcels()
