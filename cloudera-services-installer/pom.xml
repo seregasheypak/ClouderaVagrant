@@ -35,9 +35,7 @@
                             <mainClass>cloudera.services.installer.Main</mainClass>
                         </manifest>
                     </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
+                    <descriptor>${project.basedir}/src/assembly/zip-with-dependencies.xml</descriptor>
                 </configuration>
                 <executions>
                     <execution>

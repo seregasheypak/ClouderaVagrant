@@ -66,12 +66,16 @@ node 'vm-cluster-node1.localdomain' inherits default {
     ensure => directory,
   }
   ->
-  file{'/var/lib/cloudera/cloudera-services-installer.jar':
+  file{'/var/lib/cloudera/cloudera-services-installer.zip':
     ensure => file,
-    source => 'puppet:///modules/hadoop/cloudera-services-installer.jar',
+    source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
   }
   ->
-  exec {'java -jar /var/lib/cloudera/cloudera-services-installer.jar':
+  exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
+    path => ['/usr/bin'],
+  }
+  ->
+  exec {'java -cp /var/lib/cloudera/*.jar cloudera.services.installer.Main':
     path => ['/usr/java/default', '/usr/bin'],
   }
 }
