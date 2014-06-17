@@ -75,7 +75,7 @@ node 'vm-cluster-node1.localdomain' inherits default {
     path => ['/usr/bin'],
   }
   ->
-  exec {'java -cp /var/lib/cloudera/lib/*.jar cloudera.services.installer.Main':
+  exec {'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main':
     path => ['/usr/java/default', '/usr/bin'],
   }
 }
