@@ -50,13 +50,29 @@ node default {
         
 }
 
+
+#master node, install parcels
 node 'vm-cluster-node1.localdomain' inherits default {
+  
   class { 'cloudera':
         cm_version => $cm_version,
         cm_server_host => 'vm-cluster-node1.localdomain',
         use_parcels    => true,
-    } ->   
-  class { 'cloudera::cm::server': }
+  } 
+  ->   
+  class { 'cloudera::cm::server': }  
+  ->
+  file{'/var/lib/cloudera':
+    ensure => directory,
+  }
+  ->
+  file{'/var/lib/cloudera/cloudera-services-installer.jar':
+    ensure => file,
+    source => 'puppet:///modules/hadoop/cloudera-services-installer.jar',
+  }
+  ->
+  exec {'/usr/java/default/java -jar /var/lib/cloudera/cloudera-services-installer.jar':
+  }
 }
 
 node 'vm-cluster-node2.localdomain' inherits default {
@@ -73,6 +89,10 @@ node 'vm-cluster-node3.localdomain' inherits default {
         cm_server_host => 'vm-cluster-node1.localdomain',
         use_parcels    => true,        
   }  
+}
+
+#Postgres node, no hadoop
+node 'vm-cluster-node4.localdomain' inherits default {  
 }
 
 

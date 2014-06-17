@@ -46,6 +46,17 @@ Vagrant.configure($API_VERSION) do |config|
     slave2.vm.network :private_network, ip: "10.211.55.103"
   end
 
+  #not a hadoop node
+  config.vm.define :slave3 do |slave3|
+    slave3.vm.box = "centos64"
+    slave3.vm.provider :virtualbox do |v|
+      v.name = "vm-cluster-node4"
+      v.customize ["modifyvm", :id, "--memory", vm_mem]
+    end
+    slave3.vm.hostname = "vm-cluster-node4.localdomain"
+    slave3.vm.network :private_network, ip: "10.211.55.104"
+  end
+
   config.vm.provision :shell, :inline => $host_script
   config.vm.provision :puppet do |puppet|
     puppet.manifests_path = '../puppet/manifests'
