@@ -89,6 +89,10 @@ node 'vm-cluster-node4.localdomain' inherits default {
     ensure => directory,
   }
   ->
+  file{'/var/log/cloudera-installer/':
+    ensure => directory,
+  }
+  ->
   file{'/var/lib/cloudera/cloudera-services-installer.zip':
     ensure => file,
     source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
