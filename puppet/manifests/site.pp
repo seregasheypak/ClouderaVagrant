@@ -77,13 +77,6 @@ node 'vm-cluster-node3.localdomain' inherits default {
         cm_server_host => 'vm-cluster-node1.localdomain',
         use_parcels    => true,        
   }  
-}
-
-#Postgres node, no hadoop
-node 'vm-cluster-node4.localdomain' inherits default {  
-  package { 'jdk':
-    ensure => 'latest',
-  }
   ->
   file{'/var/lib/cloudera':
     ensure => directory,
@@ -105,6 +98,10 @@ node 'vm-cluster-node4.localdomain' inherits default {
   exec {'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main':
     path => ['/usr/java/default', '/usr/bin'],
   }
+}
+
+#Postgres node, no hadoop
+node 'vm-cluster-node4.localdomain' inherits default {      
 }
 
 
