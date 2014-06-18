@@ -101,7 +101,16 @@ node 'vm-cluster-node3.localdomain' inherits default {
 }
 
 #Postgres node, no hadoop
-node 'vm-cluster-node4.localdomain' inherits default {      
+node 'vm-cluster-node4.localdomain' inherits default {  
+  include monit
+  
+  class { 'postgresql::server':
+  }
+  ->
+  postgresql::server::db { 'scoring_service_database':
+    user     => 'scoring_service_user',
+    password => postgresql_password('scoring_service_user', 'scoring_service_user'),
+  }    
 }
 
 
