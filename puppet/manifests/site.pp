@@ -81,6 +81,10 @@ node 'vm-cluster-node3.localdomain' inherits default {
 
 #Postgres node, no hadoop
 node 'vm-cluster-node4.localdomain' inherits default {  
+  package { 'jdk':
+    ensure => 'latest',
+  }
+  ->
   file{'/var/lib/cloudera':
     ensure => directory,
   }
