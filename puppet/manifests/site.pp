@@ -78,6 +78,9 @@ node 'vm-cluster-node3.localdomain' inherits default {
         use_parcels    => true,        
   }  
   ->
+  class{'hadoop::users_and_groups':
+  }
+  ->
   file{'/var/lib/cloudera':
     ensure => directory,
   }
@@ -110,7 +113,23 @@ node 'vm-cluster-node4.localdomain' inherits default {
   postgresql::server::db { 'scoring_service_database':
     user     => 'scoring_service_user',
     password => postgresql_password('scoring_service_user', 'scoring_service_user'),
-  }    
+  }   
+
+  class { 'glassfish':
+    version        => '3.1.2.2-4',
+    domain         => 'kyc-domain',
+    admin_user     => 'devops',
+    admin_password => 'devops',
+    jvmoptions     => ["-Xmx2G", "-XX:MaxPermSize=512m"],
+  }
+  ->
+  glassfish::rootcertificate { 'scoring-service-root.crt':
+    file_source => 'puppet:///modules/glassfish/scoring-service-root.crt',
+    crt_alias   => 'scoring-service-root',
+  } 
+
+
+
 }
 
 
