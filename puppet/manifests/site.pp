@@ -100,6 +100,7 @@ node 'vm-cluster-node3.localdomain' inherits default {
   ->
   exec {'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main':
     path => ['/usr/java/default', '/usr/bin'],
+    timeout => 0,
   }
 }
 
