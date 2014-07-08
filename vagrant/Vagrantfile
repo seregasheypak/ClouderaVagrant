@@ -10,6 +10,7 @@ cat > /etc/hosts <<EOF
 10.211.55.101 vm-cluster-node1.localdomain vm-cluster-node1
 10.211.55.102 vm-cluster-node2.localdomain vm-cluster-node2
 10.211.55.103 vm-cluster-node3.localdomain vm-cluster-node3
+10.211.55.104 vm-cluster-node4.localdomain vm-cluster-node4
 EOF
 SCRIPT
 
