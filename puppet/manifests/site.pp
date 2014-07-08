@@ -45,7 +45,15 @@ node default {
         gpgcheck  => 0,
         protect   => 1,
     }
-    
+    class{'hadoop::users_and_groups' :
+    }
+    ->
+    file{'/dfs':
+      ensure => directory,
+      group => 'hadoop',
+      owner => 'hdfs',
+      
+    }
     append_if_no_such_line { sysctl_all_ipv6:
       file => "/etc/sysctl.conf",
       line => "net.ipv6.conf.all.disable_ipv6 = 1"
@@ -85,10 +93,7 @@ node 'vm-cluster-node3.localdomain' inherits default {
         cm_server_host => 'vm-cluster-node1.localdomain',
         use_parcels    => true,        
   }  
-  ->
-  class{'hadoop::users_and_groups':
-  }
-  ->
+  ->  
   file{'/var/lib/cloudera':
     ensure => directory,
   }
