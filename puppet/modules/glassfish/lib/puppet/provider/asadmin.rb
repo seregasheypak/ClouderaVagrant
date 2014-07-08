@@ -13,7 +13,7 @@ class Puppet::Provider::Asadmin < Puppet::Provider
     self.debug command
     result = `#{command}`
     self.fail result unless $?.exitstatus == 0
-    result
+    return result.split(/[\r\n]+/)
   end
 
   def escape(value)
