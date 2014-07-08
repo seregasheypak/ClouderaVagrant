@@ -1,5 +1,5 @@
 class hadoop::users_and_groups {
-  group{'supergroup':
+  group{['supergroup', 'hadoop']:
     ensure => present,
   }
   ->
