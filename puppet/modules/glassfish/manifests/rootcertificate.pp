@@ -8,14 +8,14 @@ define glassfish::rootcertificate(
   
   file{'/var/lib/glassfish':
     ensure => directory,
-  }
+  }->
   file{$name:
     source => $file_source,
     path => "/var/lib/glassfish/$name", 
   }
-    
+  ->
   exec{"keytool -import -trustcacerts -noprompt -alias $crt_alias -file /var/lib/glassfish/$name -storepass $keystorepass -keystore /opt/glassfish-web/glassfish/domains/kyc-domain/config/cacerts.jks":   
-    onlyif => "/usr/bin/test -z `/usr/java/default/bin/keytool -list -storepass $keystorepass -keystore /opt/glassfish-web/glassfish/domains/kyc-domain/config/cacerts.jks | grep $crt_alias`",
+    onlyif => "/usr/bin/test -z `keytool -list -storepass $keystorepass -keystore /opt/glassfish-web/glassfish/domains/kyc-domain/config/cacerts.jks | grep $crt_alias`",
     subscribe   => File[$name],
     path => ['/usr/bin', '/usr/java/default/bin'],
   }
