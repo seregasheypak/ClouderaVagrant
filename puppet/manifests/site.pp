@@ -37,6 +37,14 @@ node default {
       hasrestart => true,
       hasstatus => true,
     }
+
+    yumrepo { 'test-local':
+        descr     => 'CentOS-$releasever - local packages for $basearch',
+        baseurl   => 'http://144.76.139.130/CentOS/$releasever/local/$basearch',
+        enabled   => 1,
+        gpgcheck  => 0,
+        protect   => 1,
+    }
     
     append_if_no_such_line { sysctl_all_ipv6:
       file => "/etc/sysctl.conf",
