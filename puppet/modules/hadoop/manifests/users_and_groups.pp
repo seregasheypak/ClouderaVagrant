@@ -3,7 +3,7 @@ class hadoop::users_and_groups {
     ensure => present,
   }
   ->
-  user {['mapred', 'hbase']:
+  user {['mapred', 'hbase', 'hdfs']:
     ensure => present,
     groups => ['supergroup'],
   }
