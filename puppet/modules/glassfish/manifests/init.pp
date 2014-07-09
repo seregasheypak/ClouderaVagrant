@@ -28,13 +28,15 @@ class glassfish (
     $password_file = '/home/glassfish/.aspass'
 
     if $disable_console_updates {
-        exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled':
+        exec {'disable_download': 
+            command => '/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled',
             creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled',
             require => Package[$package_name],
             before => Service[$package_name],            
         }
     }else {
-        exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar':
+        exec {'enable_download': 
+            command => '/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar',
             creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar',
             require => Package[$package_name],
             before => Service[$package_name],
@@ -65,7 +67,7 @@ class glassfish (
     service { $package_name:
         ensure    => running,
         enable    => true,
-        require   => Domain[$domain],
+        require   => [Domain[$domain], Exec[disable_download], Exec[enable_download]]
     }
     file { $password_file:
         ensure  => present,
