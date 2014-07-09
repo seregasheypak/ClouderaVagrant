@@ -31,13 +31,13 @@ class glassfish (
         exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled':
             creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled',
             require => Package[$package_name],
-            notify => Service[$package_name],            
+            before => Service[$package_name],            
         }
     }else {
         exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar':
             creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar',
             require => Package[$package_name],
-            notify => Service[$package_name],
+            before => Service[$package_name],
         }
     }
 
