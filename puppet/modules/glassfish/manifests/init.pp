@@ -19,12 +19,23 @@ class glassfish (
   $admin_port = '4848',
   $instance_port = '8080',  
   $jvmoptions = [],
-  $allow_encoded_slash = 'true'
+  $allow_encoded_slash = 'true',
+  $disable_console_updates = 'true',
   ) {
 
     $glassfish_user = 'glassfish'
     $glassfish_group = 'glassfish'
     $password_file = '/home/glassfish/.aspass'
+
+    if $disable_console_updates {
+        exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled':
+            creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled',
+        }
+    }else {
+        exec {'/bin/mv /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar.disabled /opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar':
+            creates => '/opt/glassfish-web/glassfish/modules/console-updatecenter-plugin.jar',
+        }
+    }
 
     package { $package_name:
         ensure  => $version,
