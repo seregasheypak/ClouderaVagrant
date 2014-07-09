@@ -67,7 +67,7 @@ class glassfish (
     service { $package_name:
         ensure    => running,
         enable    => true,
-        require   => [Domain[$domain], Exec[disable_download], Exec[enable_download]]
+        require   => Domain[$domain]
     }
     file { $password_file:
         ensure  => present,
