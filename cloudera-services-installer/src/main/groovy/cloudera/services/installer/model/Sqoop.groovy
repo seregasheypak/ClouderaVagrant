@@ -16,7 +16,7 @@ class Sqoop implements BuiltModel {
     public static final String SERVICE_TYPE_NAME = 'SQOOP'
     public static final String SERVICE_NAME = 'SQOOP01'
 
-    public static final String SQOOP_SERVER = 'SQOOPSERVER'
+    public static final String SQOOP_SERVER = 'SQOOP_SERVER'
 
 
     @Override
@@ -41,7 +41,7 @@ class Sqoop implements BuiltModel {
                 new SqoopServerConfigGroup().build(),
         ]
         sqoopService.roles = roleList
-        new ApiServiceList(services: [impalaService])
+        new ApiServiceList(services: [sqoopService])
     }
 
 

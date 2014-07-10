@@ -2,9 +2,13 @@ package cloudera.services.installer.model
 
 import com.cloudera.api.model.ApiConfig
 import com.cloudera.api.model.ApiConfigList
+import com.cloudera.api.model.ApiHostRef
+import com.cloudera.api.model.ApiRole
 import com.cloudera.api.model.ApiRoleConfigGroup
+import com.cloudera.api.model.ApiRoleConfigGroupRef
 import com.cloudera.api.model.ApiService
 import com.cloudera.api.model.ApiServiceConfig
+import com.cloudera.api.model.ApiServiceList
 import com.cloudera.api.model.ApiServiceRef
 
 class Hue implements BuiltModel{
@@ -12,8 +16,8 @@ class Hue implements BuiltModel{
     public static final String SERVICE_TYPE_NAME = 'HUE'
     public static final String SERVICE_NAME = 'HUE01'
 
-    public static final String HUE_SERVER = 'HUESERVER'
-    public static final String BEESWAX_SERVER = 'BEESWAXSERVER'
+    public static final String HUE_SERVER = 'HUE_SERVER'
+    public static final String BEESWAX_SERVER = 'BEESWAX_SERVER'
 
     @Override
     def build() {
@@ -28,7 +32,26 @@ class Hue implements BuiltModel{
         def roleList = []
 
 
-        return null
+        //add HUE_SERVER
+        roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: HueServerConfigGroup.NAME),
+                hostRef: new ApiHostRef(hostId: Hosts.HOST_01),
+                name: "$HUE_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                type: HUE_SERVER
+        )
+
+        //add BEESWAX_SERVER
+        roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: BeeswaxServerConfigGroup.NAME),
+                hostRef: new ApiHostRef(hostId: Hosts.HOST_01),
+                name: "$BEESWAX_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                type: BEESWAX_SERVER
+        )
+
+        hueService.roleConfigGroups = [
+                new HueServerConfigGroup().build(),
+                new BeeswaxServerConfigGroup().build(),
+        ]
+        hueService.roles = roleList
+        new ApiServiceList(services: [hueService])
     }
 
     ApiServiceConfig createServiceWideConfig() {
