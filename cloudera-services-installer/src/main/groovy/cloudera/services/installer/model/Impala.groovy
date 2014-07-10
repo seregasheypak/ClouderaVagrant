@@ -16,9 +16,9 @@ class Impala implements BuiltModel {
     public static final String SERVICE_TYPE_NAME = 'IMPALA'
     public static final String SERVICE_NAME = 'IMPALA01'
 
-    public static final String IMPALA_DAEMON = 'IMPALADAEMON'
-    public static final String IMPALA_CATALOG_SERVER = 'IMPALACATALOGSERVERDAEMON'
-    public static final String IMPALA_STATE_STORE_DAEMON = 'IMPALASTATESTOREDAEMON'
+    public static final String IMPALA_DAEMON = 'IMPALAD'
+    public static final String IMPALA_CATALOG_SERVER = 'CATALOGSERVER'
+    public static final String IMPALA_STATE_STORE_DAEMON = 'STATESTORE'
 
 
     @Override
