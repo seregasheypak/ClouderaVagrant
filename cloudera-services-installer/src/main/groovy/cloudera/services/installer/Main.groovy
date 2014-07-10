@@ -25,6 +25,9 @@ class Main {
                     .createZookeeper()
                     .createHBase()
                     .createHive()
+                    .createImpala()
+                    .createSqoop()
+                    .createHue()
         }catch(BadRequestException ex){
 
             ex.printStackTrace()

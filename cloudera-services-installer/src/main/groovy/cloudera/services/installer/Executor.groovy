@@ -2,8 +2,11 @@ package cloudera.services.installer
 
 import cloudera.services.installer.model.HBase
 import cloudera.services.installer.model.Hive
+import cloudera.services.installer.model.Hue
+import cloudera.services.installer.model.Impala
 import cloudera.services.installer.model.MapReduce
 import cloudera.services.installer.model.Oozie
+import cloudera.services.installer.model.Sqoop
 import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
@@ -131,6 +134,23 @@ class Executor {
         this
     }
 
+    def createSqoop() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Sqoop().build())
+        LOG.info 'Sqoop service has been created'
+        this
+    }
+
+    def createImpala() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Impala().build())
+        LOG.info 'Impala service has been created'
+        this
+    }
+
+    def createHue() {
+        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Hue().build())
+        LOG.info 'Hue service has been created'
+        this
+    }
 
 
 
