@@ -25,7 +25,7 @@ class HDFS implements BuiltModel{
         hdfsService.displayName = SERVICE_NAME
         hdfsService.name        = SERVICE_NAME
         hdfsService.type        = SERVICE_TYPE_NAME
-
+        hdfsService.config = createServiceWideConfig()
 
 
 
@@ -65,6 +65,12 @@ class HDFS implements BuiltModel{
                                         new HDFSGatewayConfigGroup().build()]
         hdfsService.roles = roleList
         new ApiServiceList(services: [hdfsService])
+    }
+
+    ApiServiceConfig createServiceWideConfig() {
+        def apiConfig = new ApiServiceConfig()
+        apiConfig.add new ApiConfig(name: 'dfs_block_local_path_access_user', value: 'impala')
+        return apiConfig
     }
 
     static class DataNodeConfigGroup implements BuiltModel{
