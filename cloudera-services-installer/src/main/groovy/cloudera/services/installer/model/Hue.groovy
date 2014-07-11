@@ -18,6 +18,7 @@ class Hue implements BuiltModel{
 
     public static final String HUE_SERVER = 'HUE_SERVER'
     public static final String BEESWAX_SERVER = 'BEESWAX_SERVER'
+    public static final String KT_RENEWER = 'KT_RENEWER'
 
     @Override
     def build() {
@@ -49,6 +50,7 @@ class Hue implements BuiltModel{
         hueService.roleConfigGroups = [
                 new HueServerConfigGroup().build(),
                 new BeeswaxServerConfigGroup().build(),
+                new KtRenewerConfigGroup().build(),
         ]
         hueService.roles = roleList
         new ApiServiceList(services: [hueService])
@@ -64,6 +66,24 @@ class Hue implements BuiltModel{
         apiConfig.add new ApiConfig(name: 'sqoop_service', value: Sqoop.SERVICE_NAME)
 
         return apiConfig
+    }
+
+    static class KtRenewerConfigGroup implements BuiltModel{
+
+        public static final String NAME = "$SERVICE_NAME-$KT_RENEWER-BASE"
+
+        @Override
+        def build() {
+            def configGroup = new ApiRoleConfigGroup()
+            configGroup.base = true
+            configGroup.roleType = KT_RENEWER
+            configGroup.name = NAME
+            configGroup.displayName = "$KT_RENEWER (Default)"
+            configGroup.serviceRef = new ApiServiceRef(clusterName: Cluster.name, serviceName: SERVICE_NAME)
+            configGroup.config = new ApiConfigList([
+            ])
+            return configGroup
+        }
     }
 
     static class HueServerConfigGroup implements BuiltModel{
