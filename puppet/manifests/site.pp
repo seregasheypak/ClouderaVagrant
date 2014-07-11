@@ -52,7 +52,7 @@ node default {
       ensure => directory,
       group => 'hadoop',
       owner => 'hdfs',
-      
+
     }
     append_if_no_such_line { sysctl_all_ipv6:
       file => "/etc/sysctl.conf",
@@ -122,6 +122,9 @@ node 'vm-cluster-node4.localdomain' inherits default {
   include monit
   
   class { 'postgresql::server':
+    ip_mask_allow_all_users    => '0.0.0.0/0',
+    listen_addresses           => '*',
+    postgres_password          => 'TPSrep0rt!',
   }
   ->
   postgresql::server::db { 'scoring_service_database':
