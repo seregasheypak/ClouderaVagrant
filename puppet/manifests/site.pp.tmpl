@@ -107,13 +107,13 @@ node '$slave2_name.localdomain' inherits default {
     source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
   }
   
-  host1_name = '$master_name.localdomain'
-  host2_name = '$slave1_name.localdomain'
-  host3_name = '$slave2_name.localdomain'
+  $host1_name = '$master_name.localdomain'
+  $host2_name = '$slave1_name.localdomain'
+  $host3_name = '$slave2_name.localdomain'
 
-  host1_ip = '$master_ip'
-  host2_ip = '$slave1_ip'
-  host3_ip = '$slave2_ip'
+  $host1_ip = '$master_ip'
+  $host2_ip = '$slave1_ip'
+  $host3_ip = '$slave2_ip'
 
   file{'/var/lib/cloudera/lib/cloudera-installer.properties':
     ensure => file,
