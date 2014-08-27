@@ -117,15 +117,14 @@ node '$slave2_name.localdomain' inherits default {
   exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
     path    => ['/usr/bin'],
     creates => '/var/lib/cloudera/lib',
-    require => File['/var/lib/cloudera/cloudera-services-installer.zip'],
-    notify  => Exec['run_cloudera_installer'],
+    require => File['/var/lib/cloudera/cloudera-services-installer.zip'],    
   }
   ->
   file{'/var/lib/cloudera/lib/cloudera-installer.properties':
     ensure => file,
-    content => template("hadoop/cloudera-installer.properties.erb"),    
+    content => template("hadoop/cloudera-installer.properties.erb"),        
   }
-  
+  ~>
   exec {'run_cloudera_installer':
     command => 'java -Dproperties.location=/var/lib/cloudera/lib/cloudera-installer.properties -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
     path => ['/usr/java/default', '/usr/bin'],
