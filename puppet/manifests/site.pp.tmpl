@@ -114,19 +114,20 @@ node '$slave2_name.localdomain' inherits default {
   $host1_ip = '$master_ip'
   $host2_ip = '$slave1_ip'
   $host3_ip = '$slave2_ip'
-
-  file{'/var/lib/cloudera/lib/cloudera-installer.properties':
-    ensure => file,
-    content => template("hadoop/cloudera-installer.properties.erb"),
+  exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
+    path    => ['/usr/bin'],
+    creates => '/var/lib/cloudera/lib',
     require => File['/var/lib/cloudera/cloudera-services-installer.zip'],
+    notify  => Exec['run_cloudera_installer'],
   }
   ->
-  exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
-    path => ['/usr/bin'],
-    creates => '/var/lib/cloudera/lib',
+  file{'/var/lib/cloudera/lib/cloudera-installer.properties':
+    ensure => file,
+    content => template("hadoop/cloudera-installer.properties.erb"),    
   }
-  ~>
-  exec {'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main':
+  
+  exec {'run_cloudera_installer':
+    command => 'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
     path => ['/usr/java/default', '/usr/bin'],
     cwd => '/var/lib/cloudera/lib/',
     timeout => 0,
