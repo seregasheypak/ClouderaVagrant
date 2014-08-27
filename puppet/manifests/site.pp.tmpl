@@ -124,7 +124,7 @@ node '$slave2_name.localdomain' inherits default {
     ensure => file,
     content => template("hadoop/cloudera-installer.properties.erb"),        
   }
-  ~>
+  ->
   exec {'run_cloudera_installer':
     command => 'java -Dproperties.location=/var/lib/cloudera/lib/cloudera-installer.properties -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
     path => ['/usr/java/default', '/usr/bin'],
@@ -135,8 +135,7 @@ node '$slave2_name.localdomain' inherits default {
   ->
   exec{'hadoop namenode -format':
     path => ['/usr/bin'],
-    timeout => 0,
-    refreshonly => true,
+    timeout => 0,    
     user => 'hdfs',
   }
 }
