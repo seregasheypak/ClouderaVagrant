@@ -47,8 +47,8 @@ class HDFS implements BuiltModel{
         }
         //add NN
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: NameNodeConfigGroup.NAME),
-                                  hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                                  name:               "$NAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                                  hostRef:            new ApiHostRef(hostId: Hosts.HOST_03),
+                                  name:               "$NAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
                                   type:               NAMENODE
                 )
 
