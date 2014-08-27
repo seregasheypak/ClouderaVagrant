@@ -28,7 +28,7 @@ class Hosts implements BuiltModel{
 
     private Hosts(){
         Properties prop = new Properties()
-        prop.load('cloudera-installer.properties')
+        prop.load(new FileReader('cloudera-installer.properties'))
         HOST_01 = prop.getProperty('host1.name')
         HOST_02 = prop.getProperty('host2.name')
         HOST_03 = prop.getProperty('host3.name')
