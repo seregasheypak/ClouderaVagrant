@@ -32,8 +32,8 @@ class Sqoop implements BuiltModel {
 
         //add SQOOP_SERVER
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: SqoopServerConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_01),
-                name: "$SQOOP_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name: "$SQOOP_SERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type: SQOOP_SERVER
         )
 

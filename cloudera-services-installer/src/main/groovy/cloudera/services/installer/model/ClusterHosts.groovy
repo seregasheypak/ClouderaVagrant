@@ -8,9 +8,9 @@ import com.cloudera.api.model.ApiHostRefList
  * Date: 08.01.14
  * Time: 12:53
  */
-class ClusterHosts extends Hosts{
+class ClusterHosts {
 
     def build(){
-        new ApiHostRefList(HOSTS.collect{ new ApiHostRef(hostId: it.hostname)})
+        new ApiHostRefList(Hosts.getInstance().HOSTS.collect{ new ApiHostRef(hostId: it.hostname)})
     }
 }

@@ -31,7 +31,7 @@ class HDFS implements BuiltModel{
 
         def roleList = []
 
-        Hosts.HOSTS.each { host ->
+        Hosts.getInstance().HOSTS.each { host ->
             //add DATANODE for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:DataNodeConfigGroup.NAME),
                                      hostRef:            new ApiHostRef(hostId: host.hostname),
@@ -47,15 +47,15 @@ class HDFS implements BuiltModel{
         }
         //add NN
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: NameNodeConfigGroup.NAME),
-                                  hostRef:            new ApiHostRef(hostId: Hosts.HOST_03),
-                                  name:               "$NAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
+                                  hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_03),
+                                  name:               "$NAMENODE-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}",
                                   type:               NAMENODE
                 )
 
         //add SNN
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: SecondaryNameNodeConfigGroup.NAME),
-                                  hostRef:            new ApiHostRef(hostId: Hosts.HOST_02),
-                                  name:               "$SECONDARYNAMENODE-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
+                                  hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_02),
+                                  name:               "$SECONDARYNAMENODE-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_02)}",
                                   type:               SECONDARYNAMENODE
         )
 

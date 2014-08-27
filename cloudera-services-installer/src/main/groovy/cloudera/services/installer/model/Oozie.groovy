@@ -30,8 +30,8 @@ class Oozie implements BuiltModel {
         def roleList = []
 
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: OozieServerConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_02),
-                name: "$OOZIE_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_02),
+                name: "$OOZIE_SERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_02)}",
                 type: OOZIE_SERVER
         )
 

@@ -156,7 +156,7 @@ class Executor {
 
     def createRoot() {
         new ClouderaManagerClientBuilder()
-                .withHost(System.getProperty('scm.host', '10.211.55.101'))
+                .withHost(System.getProperty('scm.host', Hosts.getInstance().HOST_01))
                 .withUsernamePassword(System.getProperty('scm.username', 'admin'),
                 System.getProperty('scm.password', 'admin'))
                 .build()

@@ -32,7 +32,7 @@ class Zookeeper implements BuiltModel{
 
         def roleList = []
 
-        Hosts.HOSTS.eachWithIndex { host, idx ->
+        Hosts.getInstance().HOSTS.eachWithIndex { host, idx ->
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: ZookeeperServerConfigGroup.NAME),
                                      hostRef:            new ApiHostRef(hostId: host.hostname),
                                      name:               "$SERVICE_TYPE_NAME-${Hosts.asRoleNameSuffix(host.hostname)}",

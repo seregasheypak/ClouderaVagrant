@@ -33,7 +33,7 @@ class HBase implements BuiltModel {
 
         def roleList = []
 
-        Hosts.HOSTS.each { host ->
+        Hosts.getInstance().HOSTS.each { host ->
             //add Gateway for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:GatewayConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
@@ -45,23 +45,23 @@ class HBase implements BuiltModel {
 
         //add all others roles
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: MasterConfigGroup.NAME),
-                hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                name:               "$MASTER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name:               "$MASTER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type:               MASTER
         )
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: RegionConfigGroup.NAME),
-                hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                name:               "$REGIONSERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name:               "$REGIONSERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type:               REGIONSERVER
         )
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: ThriftServerConfigGroup.NAME),
-                hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                name:               "$HBASETHRIFTSERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name:               "$HBASETHRIFTSERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type:               HBASETHRIFTSERVER
         )
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: RestServerConfigGroup.NAME),
-                hostRef:            new ApiHostRef(hostId: Hosts.HOST_01),
-                name:               "$HBASERESTSERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name:               "$HBASERESTSERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type:               HBASERESTSERVER
         )
 

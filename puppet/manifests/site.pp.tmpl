@@ -1,0 +1,176 @@
+$cm_version = '4.8.0'
+
+define append_if_no_such_line($file, $line, $refreshonly = 'false') {
+  exec { "/bin/echo '$line' >> '$file'":
+    unless      => "/bin/grep -Fxqe '$line' '$file'",
+    path        => "/bin",
+    refreshonly => $refreshonly,
+  }
+}
+
+node default {
+    include sudo
+    
+    sudo::conf { 'wheel':
+        priority  => 10,
+        content   => "%wheel    ALL=(ALL)   NOPASSWD: ALL\n",
+    }
+  
+    class { timezone:
+        zone => "Europe/Moscow",
+    }
+
+    class { 'selinux':
+        mode => 'disabled',
+    }
+    
+    service { "iptables":
+        enable => false,
+        ensure => stopped,
+        hasrestart => true,
+        hasstatus => true,
+      }    
+    
+    service { "ip6tables":
+        enable => false,
+      ensure => stopped,
+      hasrestart => true,
+      hasstatus => true,
+    }
+
+    yumrepo { 'test-local':
+        descr     => 'CentOS-$releasever - local packages for $basearch',
+        baseurl   => 'http://144.76.139.130/CentOS/$releasever/local/$basearch',
+        enabled   => 1,
+        gpgcheck  => 0,
+        protect   => 1,
+    }
+    class{'hadoop::users_and_groups' :
+    }
+    ->
+    file{'/dfs':
+      ensure => directory,
+      group => 'hadoop',
+      owner => 'hdfs',
+
+    }
+    append_if_no_such_line { sysctl_all_ipv6:
+      file => "/etc/sysctl.conf",
+      line => "net.ipv6.conf.all.disable_ipv6 = 1"
+    }
+
+    append_if_no_such_line { sysctl_default_ipv6:
+      file => "/etc/sysctl.conf",
+      line => "net.ipv6.conf.default.disable_ipv6 = 1"
+    }
+        
+}
+
+
+#master node, install parcels
+node '$master_name.localdomain' inherits default {
+  
+  class { 'cloudera':
+        cm_version => $cm_version,
+        cm_server_host => 'vm-cluster-node1.localdomain',
+        use_parcels    => true,
+  } 
+  ->   
+  class { 'cloudera::cm::server': }    
+}
+
+node '$slave1_name.localdomain' inherits default {
+  class { 'cloudera':
+        cm_version => $cm_version,
+        cm_server_host => 'vm-cluster-node1.localdomain',
+        use_parcels    => true,        
+  }  
+}
+
+node '$slave2_name.localdomain' inherits default {
+  class { 'cloudera':
+        cm_version => $cm_version,
+        cm_server_host => 'vm-cluster-node1.localdomain',
+        use_parcels    => true,        
+  }  
+  ->  
+  file{'/var/lib/cloudera':
+    ensure => directory,
+  }
+  ->
+  file{'/var/log/cloudera-installer/':
+    ensure => directory,
+  }
+  ->
+  file{'/var/lib/cloudera/cloudera-services-installer.zip':
+    ensure => file,
+    source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
+  }
+  
+  host1_name = '$master_name.localdomain'
+  host2_name = '$slave1_name.localdomain'
+  host3_name = '$slave2_name.localdomain'
+
+  host1_ip = '$master_ip'
+  host2_ip = '$slave1_ip'
+  host3_ip = '$slave2_ip'
+
+  file{'/var/lib/cloudera/lib/cloudera-installer.properties':
+    ensure => file,
+    content => template("hadoop/cloudera-installer.properties.erb"),
+    require => File['/var/lib/cloudera/cloudera-services-installer.zip'],
+  }
+  ->
+  exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
+    path => ['/usr/bin'],
+    creates => '/var/lib/cloudera/lib',
+  }
+  ~>
+  exec {'java -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main':
+    path => ['/usr/java/default', '/usr/bin'],
+    cwd => '/var/lib/cloudera/lib/',
+    timeout => 0,
+    refreshonly => true,
+  }
+  ~>
+  exec{'hadoop namenode -format':
+    path => ['/usr/bin'],
+    timeout => 0,
+    refreshonly => true,
+    user => 'hdfs',
+  }
+}
+
+#Postgres node, no hadoop
+node '$slave3_name.localdomain' inherits default {  
+  include monit
+  
+  class { 'postgresql::server':
+    ip_mask_allow_all_users    => '0.0.0.0/0',
+    listen_addresses           => '*',
+    postgres_password          => 'TPSrep0rt!',
+  }
+  ->
+  postgresql::server::db { 'scoring_service_database':
+    user     => 'scoring_service_user',
+    password => postgresql_password('scoring_service_user', 'scoring_service_user'),
+  }   
+
+  class { 'glassfish':
+    version        => '3.1.2.2-4',
+    domain         => 'kyc-domain',
+    admin_user     => 'devops',
+    admin_password => 'devops',
+    jvmoptions     => ["-Xmx2G", "-XX:MaxPermSize=512m"],
+  }
+  ->
+  glassfish::rootcertificate { 'scoring-service-root.crt':
+    file_source => 'puppet:///modules/glassfish/scoring-service-root.crt',
+    crt_alias   => 'scoring-service-root',
+  } 
+
+
+
+}
+
+

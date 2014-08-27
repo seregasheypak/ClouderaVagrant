@@ -36,7 +36,7 @@ class MapReduce implements BuiltModel{
 
         def roleList = []
 
-        Hosts.HOSTS.each { host ->
+        Hosts.getInstance().HOSTS.each { host ->
             //add TaskTrackers for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName:TaskTrackerConfigGroup.NAME),
                     hostRef:            new ApiHostRef(hostId: host.hostname),
@@ -53,8 +53,8 @@ class MapReduce implements BuiltModel{
 
         //add JT
         roleList.add new ApiRole( roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: JobTrackerConfigGroup.NAME),
-                hostRef:            new ApiHostRef(hostId: Hosts.HOST_02),
-                name:               "$JOBTRACKER-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
+                hostRef:            new ApiHostRef(hostId: Hosts.getInstance().HOST_02),
+                name:               "$JOBTRACKER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_02)}",
                 type:               JOBTRACKER
         )
 

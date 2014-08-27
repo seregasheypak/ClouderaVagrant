@@ -35,15 +35,15 @@ class Hue implements BuiltModel{
 
         //add HUE_SERVER
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: HueServerConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_01),
-                name: "$HUE_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name: "$HUE_SERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type: HUE_SERVER
         )
 
         //add BEESWAX_SERVER
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: BeeswaxServerConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_01),
-                name: "$BEESWAX_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_01)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_01),
+                name: "$BEESWAX_SERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_01)}",
                 type: BEESWAX_SERVER
         )
 

@@ -34,22 +34,22 @@ class Impala implements BuiltModel {
 
         //add IMPALA_DAEMON
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: ImpalaDaemonConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_02),
-                name: "$IMPALA_DAEMON-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_02),
+                name: "$IMPALA_DAEMON-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_02)}",
                 type: IMPALA_DAEMON
         )
 
         //add IMPALA_CATALOG_SERVER
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: ImpalaCatalogServerConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_02),
-                name: "$IMPALA_CATALOG_SERVER-${Hosts.asRoleNameSuffix(Hosts.HOST_02)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_02),
+                name: "$IMPALA_CATALOG_SERVER-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_02)}",
                 type: IMPALA_CATALOG_SERVER
         )
 
         //add IMPALA_STATE_STORE_DAEMON
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: ImpalaStateStoreConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_03),
-                name: "$IMPALA_STATE_STORE_DAEMON-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_03),
+                name: "$IMPALA_STATE_STORE_DAEMON-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}",
                 type: IMPALA_STATE_STORE_DAEMON
         )
 

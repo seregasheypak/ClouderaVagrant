@@ -32,7 +32,7 @@ class Hive implements BuiltModel {
 
         def roleList = []
 
-        Hosts.HOSTS.each { host ->
+        Hosts.getInstance().HOSTS.each { host ->
             //add Gateway for each host
             roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: GatewayConfigGroup.NAME),
                     hostRef: new ApiHostRef(hostId: host.hostname),
@@ -43,22 +43,22 @@ class Hive implements BuiltModel {
 
         //add Webchat
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: WebChatConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_03),
-                name: "$WEBHCAT-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_03),
+                name: "$WEBHCAT-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}",
                 type: WEBHCAT
         )
 
         //add Metastore
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: MetastoreConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_03),
-                name: "$HIVEMETASTORE-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_03),
+                name: "$HIVEMETASTORE-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}",
                 type: HIVEMETASTORE
         )
 
         //add Hiveserver2
         roleList.add new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: Hiveserver2ConfigGroup.NAME),
-                hostRef: new ApiHostRef(hostId: Hosts.HOST_03),
-                name: "$HIVESERVER2-${Hosts.asRoleNameSuffix(Hosts.HOST_03)}",
+                hostRef: new ApiHostRef(hostId: Hosts.getInstance().HOST_03),
+                name: "$HIVESERVER2-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}",
                 type: HIVESERVER2
         )
 

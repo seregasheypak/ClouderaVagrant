@@ -10,15 +10,39 @@ import com.cloudera.api.model.ApiHostList
  */
 class Hosts implements BuiltModel{
 
-    public static final String HOST_01 = 'vm-cluster-node1.localdomain'
-    public static final String HOST_02 = 'vm-cluster-node2.localdomain'
-    public static final String HOST_03 = 'vm-cluster-node3.localdomain'
+    public final HOSTS
 
-    public static final HOSTS = [
-                    [hostname: HOST_01, ipAddress:'10.211.55.101'],
-                    [hostname: HOST_02, ipAddress:'10.211.55.102'],
-                    [hostname: HOST_03, ipAddress:'10.211.55.103']
-                ]
+    public final String HOST_01
+    public final String HOST_02
+    public final String HOST_03
+
+    private static Hosts instance
+
+    public static Hosts getInstance(){
+        if(instance == null){
+            instance = new Hosts()
+        }
+
+        return instance
+    }
+
+    private Hosts(){
+        Properties prop = new Properties()
+        prop.load('cloudera-installer.properties')
+        HOST_01 = prop.getProperty('host1.name')
+        HOST_02 = prop.getProperty('host2.name')
+        HOST_03 = prop.getProperty('host3.name')
+
+        HOSTS = [
+                [hostname: HOST_01, ipAddress: prop.getProperty('host1.ip')],
+                [hostname: HOST_02, ipAddress: prop.getProperty('host2.ip')],
+                [hostname: HOST_03, ipAddress: prop.getProperty('host3.ip')]
+        ]
+    }
+
+
+
+
 
     def build(){
         new ApiHostList(HOSTS.collect{ new ApiHost(hostId: it.hostname, hostname: it.hostname, ipAddress: it.ipAddress)})
