@@ -72,7 +72,7 @@ node '$master_name.localdomain' inherits default {
   
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => 'vm-cluster-node1.localdomain',
+        cm_server_host => '$master_name.localdomain',
         use_parcels    => true,
   } 
   ->   
@@ -82,7 +82,7 @@ node '$master_name.localdomain' inherits default {
 node '$slave1_name.localdomain' inherits default {
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => 'vm-cluster-node1.localdomain',
+        cm_server_host => '$master_name.localdomain',
         use_parcels    => true,        
   }  
 }
@@ -90,7 +90,7 @@ node '$slave1_name.localdomain' inherits default {
 node '$slave2_name.localdomain' inherits default {
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => 'vm-cluster-node1.localdomain',
+        cm_server_host => '$master_name.localdomain',
         use_parcels    => true,        
   }  
   ->  

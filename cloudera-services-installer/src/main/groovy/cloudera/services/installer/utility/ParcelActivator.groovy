@@ -43,6 +43,7 @@ class ParcelActivator {
             boolean areDownloaded = true
             readParcels().each { status ->
                 if(unexpectedStatus != null && status.stage == unexpectedStatus){
+                    LOG.error("${this.class.simpleName} $unexpectedStatus is not allowed state.")
                     throw new RuntimeException("${this.class.simpleName} $unexpectedStatus is not allowed state.")
                 }
                 if(status.stage == falseStatus){
