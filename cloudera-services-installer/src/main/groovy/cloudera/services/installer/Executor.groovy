@@ -10,6 +10,7 @@ import cloudera.services.installer.model.Sqoop
 import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
+import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
 import com.cloudera.api.v5.RootResourceV5
 
@@ -77,9 +78,17 @@ class Executor {
 
     def addHosts() {
         ApiHostList existingHosts = root.getHostsResource().readHosts(DataView.EXPORT)
-        def newHosts = new Hosts().build()
-        newHosts.hosts.removeAll { newHost ->
-            existingHosts.find { existingHost -> existingHost.hostId == newHost.hostId }
+        def newHosts = Hosts.getInstance().build()
+
+        for (ApiHost existingHost : existingHosts.getHosts()) {
+            Iterator<ApiHost> newHostsIt = newHosts.getHosts().iterator()
+            while (newHostsIt.hasNext()) {
+                ApiHost current = newHostsIt.next()
+                if (current.getHostId().equals(existingHost.getHostId())) {
+                    newHostsIt.remove()
+                    LOG.info("Host " + existingHost.getHostId() + " already exists, removing")
+                }
+            }
         }
 
 

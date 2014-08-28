@@ -49,7 +49,7 @@ class Hosts implements BuiltModel{
 
 
 
-    def build(){
+    ApiHostList build(){
         new ApiHostList(HOSTS.collect{ new ApiHost(hostId: it.hostname, hostname: it.hostname, ipAddress: it.ipAddress)})
     }
 
