@@ -33,6 +33,8 @@ class Main {
             ex.printStackTrace()
         }
 
+        Thread.sleep(10000);
+
     }
 
 }
