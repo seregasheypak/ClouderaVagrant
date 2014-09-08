@@ -61,6 +61,11 @@ class ParcelActivator {
         checkStatus(DISTRIBUTING)
     }
 
+    boolean waitForActivation(){
+        LOG.info("Waiting for parcel activation: $products")
+        checkStatus(DISTRIBUTED)
+    }
+
     def readParcels(){
         root.clustersResource.getParcelsResource(clusterName).readParcels(DataView.SUMMARY)
     }
@@ -96,6 +101,6 @@ class ParcelActivator {
         waitForDistribution()
 
         startActivation()
-
+        waitForActivation()
     }
 }

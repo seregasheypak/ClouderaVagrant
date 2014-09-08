@@ -135,12 +135,14 @@ node '$slave2_name.localdomain' inherits default {
   file{'/var/lib/hadoop-hdfs':
     ensure => directory,
     owner  => 'hdfs',
+    group  => 'hdfs',
   }
   ->
   exec{'/usr/bin/hadoop namenode -format':
     #path => ['/usr/bin', '/bin'],
-    timeout => 0,    
-    user => 'hdfs',
+    provider => 'shell'
+    timeout  => 0,    
+    user     => 'hdfs',
   }
 }
 
