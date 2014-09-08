@@ -140,7 +140,7 @@ node '$slave2_name.localdomain' inherits default {
   ->
   exec{'/usr/bin/hadoop namenode -format':
     #path => ['/usr/bin', '/bin'],
-    provider => 'shell'
+    provider => 'shell',
     timeout  => 0,    
     user     => 'hdfs',
   }
