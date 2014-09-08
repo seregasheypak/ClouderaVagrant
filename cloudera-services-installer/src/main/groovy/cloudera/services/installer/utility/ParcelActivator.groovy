@@ -92,7 +92,7 @@ class ParcelActivator {
 
     def startDownload() {
         products.each { product ->
-            getParcelResource(product.name, product.version).startDownloadCommand().wait()
+            getParcelResource(product.name, product.version).startDownloadCommand()
         }
     }
 
