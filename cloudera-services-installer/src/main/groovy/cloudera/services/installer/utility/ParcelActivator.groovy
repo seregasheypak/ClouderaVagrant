@@ -31,69 +31,85 @@ class ParcelActivator {
     RootResourceV5 root
     List<Map> products
 
-    boolean waitForDownload(){
+    boolean waitForDownload() {
         LOG.info("Waiting for parcel download: $products")
         checkStatus(DOWNLOADING, AVAILABLE_REMOTELY)
     }
 
     //TODO: use wait method of CommandApi
-    boolean checkStatus(String falseStatus, String unexpectedStatus = null){
-        for (counter in 1..WAIT_IN_SECONDS){
+    boolean checkStatus(String falseStatus, String unexpectedStatus = null) {
+        for (counter in 1..WAIT_IN_SECONDS) {
             sleep(TEN_SECONDS)
             boolean areDownloaded = true
             readParcels().each { status ->
-                if(unexpectedStatus != null && status.stage == unexpectedStatus){
+                if (unexpectedStatus != null && status.stage == unexpectedStatus) {
                     LOG.error("${this.class.simpleName} $unexpectedStatus is not allowed state.")
                     throw new RuntimeException("${this.class.simpleName} $unexpectedStatus is not allowed state.")
                 }
-                if(status.stage == falseStatus){
+                if (status.stage == falseStatus) {
                     areDownloaded = false
                 }
             }
-            if(areDownloaded){
+            if (areDownloaded) {
                 return true
             }
         }
     }
 
-    boolean waitForDistribution(){
+    boolean waitForStatus(String expectedStatus) {
+        for (counter in 1..WAIT_IN_SECONDS) {
+            sleep(TEN_SECONDS)
+            boolean allOk = true
+            readParcels().each { status ->
+                if (!status.stage.equals(expectedStatus)) {
+                    allOk = false;
+                }
+            }
+            if (allOk) {
+                return true
+            }
+        }
+        throw new RuntimeException("Timeout for status $expectedStatus")
+    }
+
+    boolean waitForDistribution() {
         LOG.info("Waiting for parcel distirbution: $products")
         checkStatus(DISTRIBUTING)
     }
 
-    boolean waitForActivation(){
+    boolean waitForActivation() {
         LOG.info("Waiting for parcel activation: $products")
-        checkStatus(DISTRIBUTED)
+        waitForStatus(ACTIVATED)
     }
 
-    def readParcels(){
+    def readParcels() {
         root.clustersResource.getParcelsResource(clusterName).readParcels(DataView.SUMMARY)
     }
 
-    def getParcelResource(String productName, String version){
+    def getParcelResource(String productName, String version) {
         root.getClustersResource().getParcelsResource(clusterName).getParcelResource(productName, version)
     }
 
-    def startDownload(){
+    def startDownload() {
         products.each { product ->
-            getParcelResource(product.name, product.version).startDownloadCommand()
+            getParcelResource(product.name, product.version).startDownloadCommand().wait()
         }
     }
 
-    def startDistribution(){
+    def startDistribution() {
         products.each { product ->
             getParcelResource(product.name, product.version).startDistributionCommand()
         }
     }
 
-    def startActivation(){
+    def startActivation() {
         products.each { product ->
             getParcelResource(product.name, product.version).activateCommand()
         }
     }
 
 
-    boolean activate(){
+    boolean activate() {
         startDownload()
         waitForDownload()
 
