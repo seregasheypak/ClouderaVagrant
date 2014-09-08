@@ -58,10 +58,10 @@ class ParcelActivator {
 
     boolean waitForStatus(String expectedStatus) {
         for (counter in 1..WAIT_IN_SECONDS) {
-            sleep(TEN_SECONDS)
+            Thread.sleep(TEN_SECONDS)
             boolean allOk = true
-            readParcels().each { status ->
-                if (!status.stage.equals(expectedStatus)) {
+            readParcels().each { parcel ->
+                if (!parcel.stage.equals(expectedStatus)) {
                     allOk = false;
                 }
             }
