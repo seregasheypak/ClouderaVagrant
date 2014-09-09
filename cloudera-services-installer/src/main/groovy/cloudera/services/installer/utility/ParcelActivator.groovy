@@ -1,7 +1,7 @@
 package cloudera.services.installer.utility
 
 import com.cloudera.api.DataView
-import com.cloudera.api.v6.RootResourceV6
+import com.cloudera.api.v5.RootResourceV5
 
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
@@ -28,7 +28,7 @@ class ParcelActivator {
 
 
     String clusterName
-    RootResourceV6 root
+    RootResourceV5 root
     List<Map> products
 
     boolean waitForDownload() {
