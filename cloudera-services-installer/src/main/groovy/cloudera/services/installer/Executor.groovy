@@ -14,8 +14,8 @@ import com.cloudera.api.model.ApiCommand
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
 import com.cloudera.api.model.ApiRoleNameList
-import com.cloudera.api.v4.ServicesResourceV4
-import com.cloudera.api.v5.RootResourceV5
+import com.cloudera.api.v6.RootResourceV6
+import com.cloudera.api.v6.ServicesResourceV6
 
 import cloudera.services.installer.model.Cluster
 import cloudera.services.installer.model.ScmConf
@@ -23,6 +23,7 @@ import cloudera.services.installer.model.Hosts
 import cloudera.services.installer.model.HDFS
 import cloudera.services.installer.utility.ParcelActivator
 import cloudera.services.installer.model.ClusterHosts
+
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -36,7 +37,7 @@ class Executor {
 
     private static final Logger LOG = LoggerFactory.getLogger(Executor.class)
 
-    private final RootResourceV5 root = createRoot()
+    private final RootResourceV6 root = createRoot()
 
 
     def configureScm() {
@@ -110,7 +111,7 @@ class Executor {
     }
 
     def createHDFS() {
-        ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
+        ServicesResourceV6 resource = root.clustersResource.getServicesResource(new Cluster().name)
         resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
         LOG.info 'Deployin client configuration'
@@ -177,7 +178,7 @@ class Executor {
                 .withUsernamePassword(System.getProperty('scm.username', 'admin'),
                 System.getProperty('scm.password', 'admin'))
                 .build()
-                .getRootV5()
+                .getRootV6()
     }
 
     //default timeout = 5 minutes
