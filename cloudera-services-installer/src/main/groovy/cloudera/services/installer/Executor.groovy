@@ -112,11 +112,7 @@ class Executor {
         ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
         resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
-
-//        LOG.info 'Deployin client configuration'
-//        sleep(5000)
-//        waitCommandExecuted(resource.deployClientConfigCommand(HDFS.SERVICE_NAME, new ApiRoleNameList()))
-//        LOG.info 'Deployin client configuration finished'
+        waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand())
         this
     }
 

@@ -137,13 +137,13 @@ node '$slave2_name.localdomain' inherits default {
     owner  => 'hdfs',
     group  => 'hdfs',
   }
-  ->
-  exec{'/usr/bin/hadoop namenode -format':
+  #->
+  #exec{'/usr/bin/hadoop namenode -format':
     #path => ['/usr/bin', '/bin'],
-    provider => 'shell',
-    timeout  => 0,    
-    user     => 'hdfs',
-  }
+   # provider => 'shell',
+   # timeout  => 0,    
+   # user     => 'hdfs',
+  #}
 }
 
 #Postgres node, no hadoop
