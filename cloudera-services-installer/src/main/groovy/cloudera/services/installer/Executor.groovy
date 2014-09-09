@@ -192,6 +192,8 @@ class Executor {
                 waitingTime += tenSeconds
                 sleep(tenSeconds)
             } else {
+                ApiCommand commandReturn = root.commandsResource.readCommand(command.getId())
+                LOG.info "Command success: " + commandReturn.getSuccess() + " " + commandReturn
                 break;
             }
         }
