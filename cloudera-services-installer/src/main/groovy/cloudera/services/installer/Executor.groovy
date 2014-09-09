@@ -185,7 +185,7 @@ class Executor {
         long tenSeconds = 10000;
         long waitingTime = 0;
         while (true) {
-            if (root.commandsResource.readCommand(command.getId()) == null) {
+            if (root.commandsResource.readCommand(command.getId()).endTime == null) {
                 if (waitingTime > timeout) {
                     throw new RuntimeException("Timeout while executing command " + command.properties);
                 }
