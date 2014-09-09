@@ -13,7 +13,6 @@ import com.cloudera.api.DataView
 import com.cloudera.api.model.ApiCommand
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
-import com.cloudera.api.model.ApiRoleNameList
 import com.cloudera.api.v4.ServicesResourceV4
 import com.cloudera.api.v5.RootResourceV5
 
@@ -113,6 +112,7 @@ class Executor {
         ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
         resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
+
 //        LOG.info 'Deployin client configuration'
 //        sleep(5000)
 //        waitCommandExecuted(resource.deployClientConfigCommand(HDFS.SERVICE_NAME, new ApiRoleNameList()))
@@ -171,6 +171,7 @@ class Executor {
 
 
     def deployClusterWideClientsConfig(){
+        LOG.info "Deploy cluster wide configuration "
         waitCommandExecuted(root.clustersResource.deployClientConfig(Cluster.name))
         this
     }

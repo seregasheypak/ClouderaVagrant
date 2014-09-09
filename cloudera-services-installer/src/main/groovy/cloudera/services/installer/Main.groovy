@@ -27,7 +27,7 @@ class Main {
                     .createHive()
                     .createImpala()
                     .createSqoop()
-                    .createHue()
+                    //.createHue()
                     .deployClusterWideClientsConfig()
         }catch(BadRequestException ex){
 
