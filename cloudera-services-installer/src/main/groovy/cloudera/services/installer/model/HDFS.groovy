@@ -67,6 +67,7 @@ class HDFS implements BuiltModel{
         new ApiServiceList(services: [hdfsService])
     }
 
+
     ApiServiceConfig createServiceWideConfig() {
         def apiConfig = new ApiServiceConfig()
         apiConfig.add new ApiConfig(name: 'dfs_block_local_path_access_user', value: 'impala')

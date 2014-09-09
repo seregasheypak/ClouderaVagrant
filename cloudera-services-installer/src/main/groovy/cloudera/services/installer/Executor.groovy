@@ -10,8 +10,11 @@ import cloudera.services.installer.model.Sqoop
 import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
+import com.cloudera.api.model.ApiCommand
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
+import com.cloudera.api.model.ApiRoleNameList
+import com.cloudera.api.v4.ServicesResourceV4
 import com.cloudera.api.v5.RootResourceV5
 
 import cloudera.services.installer.model.Cluster
@@ -107,8 +110,13 @@ class Executor {
     }
 
     def createHDFS() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new HDFS().build())
+        ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
+        resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
+        LOG.info 'Deployin client configuration'
+
+        waitCommandExecuted(resource.deployClientConfigCommand(HDFS.SERVICE_NAME, new ApiRoleNameList()))
+        LOG.info 'Deployin client configuration finished'
         this
     }
 
@@ -170,5 +178,23 @@ class Executor {
                 System.getProperty('scm.password', 'admin'))
                 .build()
                 .getRootV5()
+    }
+
+    //default timeout = 5 minutes
+    void waitCommandExecuted(ApiCommand command, long timeout = 5 * 60 * 1000) {
+        long tenSeconds = 10000;
+        long waitingTime = 0;
+        while (true) {
+            if (root.commandsResource.readCommand(command.getId()) == null) {
+                if (waitingTime > timeout) {
+                    throw new RuntimeException("Timeout while executing command " + command.properties);
+                }
+                waitingTime += tenSeconds
+                sleep(tenSeconds)
+            } else {
+                break;
+            }
+        }
+
     }
 }
