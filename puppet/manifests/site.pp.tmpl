@@ -161,7 +161,20 @@ node '$slave3_name.localdomain' inherits default {
     password => postgresql_password('scoring_service_user', 'scoring_service_user'),
   }   
 
-
+  file{'/home/vagrant/oracle_distribs/':
+    ensure => directory,
+  }
+  ->
+  file{'/home/vagrant/oracle_distribs/linux.x64_11gR2_database_1of2.zip':
+    ensure => file,
+    source => "puppet:///modules/oradb/linux.x64_11gR2_database_1of2.zip"
+  }
+  ->
+  file{'/home/vagrant/oracle_distribs/linux.x64_11gR2_database_2of2.zip':
+    ensure => file,
+    source => "puppet:///modules/oradb/linux.x64_11gR2_database_2of2.zip"
+  }
+  ->
   oradb::installdb{ '11gR2':
     version                => '11.2.0.1',
     file                   => 'linux.x64_11gR2_database',
@@ -174,7 +187,7 @@ node '$slave3_name.localdomain' inherits default {
     group_install          => 'oinstall',
     group_oper             => 'oper',
     createUser             => true,
-    downloadDir            => '/home/vgrnt/oracle_distribs/',
+    downloadDir            => '/home/vagrant/oracle_distribs/',
     zipExtract             => false,
   }
   ->
@@ -183,7 +196,7 @@ node '$slave3_name.localdomain' inherits default {
     version      => '11.2',
     user         => 'oracle',
     group        => 'dba',
-    downloadDir  => '/home/vgrnt/oracle_distribs/',    
+    downloadDir  => '/home/vagrant/oracle_distribs/',    
   }
   ->
   oradb::listener{'stop listener':
@@ -208,7 +221,7 @@ node '$slave3_name.localdomain' inherits default {
     version                 => '11.2',
     user                    => 'oracle',
     group                   => 'dba',
-    downloadDir             => '/home/vgrnt/oracle_distribs/',
+    downloadDir             => '/home/vagrant/oracle_distribs/',
     action                  => 'create',
     dbName                  => 'test',
     dbDomain                => 'oracle.com',
