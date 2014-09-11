@@ -180,7 +180,7 @@ node '$slave3_name.localdomain' inherits default {
   ->
   oradb::net{ 'config net8':
     oracleHome   => '/oracle/product/11.2/db',
-    version      => '11.2' or "12.1",
+    version      => '11.2',
     user         => 'oracle',
     group        => 'dba',
     downloadDir  => '/home/vgrnt/oracle_distribs/',    
@@ -205,7 +205,7 @@ node '$slave3_name.localdomain' inherits default {
   oradb::database{ 'testDb_Create':
     oracleBase              => '/oracle',
     oracleHome              => '/oracle/product/11.2/db',
-    version                 => '11.2' or "12.1",
+    version                 => '11.2',
     user                    => 'oracle',
     group                   => 'dba',
     downloadDir             => '/home/vgrnt/oracle_distribs/',
