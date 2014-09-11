@@ -220,6 +220,21 @@ node '$slave3_name.localdomain' inherits default {
     databaseType            => "MULTIPURPOSE",
     emConfiguration         => "NONE",    
   }
+  ->
+  oradb::client{ '12.1.0.1_Linux-x86-64':
+    version                => '11.2.0.1',
+    file                   => 'linux.x64_11gR2_database',
+    oracleBase             => '/oracle',
+    oracleHome             => '/oracle/product/12.1/client',
+    createUser             => true,
+    user                   => 'oracle',
+    group                  => 'dba',
+    group_install          => 'oinstall',
+    downloadDir            => '/install',
+    remoteFile             => true,
+    puppetDownloadMntPoint => "puppet:///modules/oradb/",
+    logoutput               => true, 
+  }
 
 
   class { 'glassfish':
