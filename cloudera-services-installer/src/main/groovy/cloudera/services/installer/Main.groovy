@@ -28,7 +28,7 @@ class Main {
                     .createImpala()
                     .createSqoop()
                     //.createHue()
-                    .deployClusterWideClientsConfig()
+                    //.deployClusterWideClientsConfig()
         }catch(BadRequestException ex){
 
             ex.printStackTrace()
