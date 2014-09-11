@@ -161,6 +161,72 @@ node '$slave3_name.localdomain' inherits default {
     password => postgresql_password('scoring_service_user', 'scoring_service_user'),
   }   
 
+
+  oradb::installdb{ '11gR2':
+    version                => '11.2.0.1.0',
+    file                   => 'linux.x64_11gR2_database',
+    databaseType           => 'SE',
+    oracleBase             => '/oracle',
+    oracleHome             => '/oracle/product/11.2/db',
+    bashProfile            => true,
+    user                   => 'oracle',
+    group                  => 'dba',
+    group_install          => 'oinstall',
+    group_oper             => 'oper',
+    createUser             => true,
+    downloadDir            => '/home/vgrnt/oracle_distribs/',
+    zipExtract             => false,
+  }
+  ->
+  oradb::net{ 'config net8':
+    oracleHome   => '/oracle/product/11.2/db',
+    version      => '11.2' or "12.1",
+    user         => 'oracle',
+    group        => 'dba',
+    downloadDir  => '/home/vgrnt/oracle_distribs/',    
+  }
+  ->
+  oradb::listener{'stop listener':
+    oracleBase   => '/oracle',
+    oracleHome   => '/oracle/product/11.2/db',
+    user         => 'oracle',
+    group        => 'dba',
+    action       => 'start',  
+  }
+  ->
+  oradb::listener{'start listener':
+    oracleBase   => '/oracle',
+    oracleHome   => '/oracle/product/11.2/db',
+    user         => 'oracle',
+    group        => 'dba',
+    action       => 'start',  
+  }
+  ->
+  oradb::database{ 'testDb_Create':
+    oracleBase              => '/oracle',
+    oracleHome              => '/oracle/product/11.2/db',
+    version                 => '11.2' or "12.1",
+    user                    => 'oracle',
+    group                   => 'dba',
+    downloadDir             => '/home/vgrnt/oracle_distribs/',
+    action                  => 'create',
+    dbName                  => 'test',
+    dbDomain                => 'oracle.com',
+    sysPassword             => 'Welcome01',
+    systemPassword          => 'Welcome01',
+    dataFileDestination     => "/oracle/oradata",
+    recoveryAreaDestination => "/oracle/flash_recovery_area",
+    characterSet            => "AL32UTF8",
+    nationalCharacterSet    => "UTF8",
+    initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
+    sampleSchema            => 'TRUE',
+    memoryPercentage        => "40",
+    memoryTotal             => "800",
+    databaseType            => "MULTIPURPOSE",
+    emConfiguration         => "NONE",    
+  }
+
+
   class { 'glassfish':
     version        => '3.1.2.2-4',
     domain         => 'kyc-domain',
