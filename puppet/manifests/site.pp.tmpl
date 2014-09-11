@@ -179,8 +179,7 @@ node '$slave3_name.localdomain' inherits default {
     oracleHome   => '/oracle/product/11.2/db',
     version      => '11.2',
     user         => 'oracle',
-    group        => 'dba',
-    downloadDir  => '/home/vagrant/oracle_distribs/',    
+    group        => 'dba',    
   }
   ->
   oradb::listener{'stop listener':
@@ -204,8 +203,7 @@ node '$slave3_name.localdomain' inherits default {
     oracleHome              => '/oracle/product/11.2/db',
     version                 => '11.2',
     user                    => 'oracle',
-    group                   => 'dba',
-    downloadDir             => '/home/vagrant/oracle_distribs/',
+    group                   => 'dba',  
     action                  => 'create',
     dbName                  => 'test',
     dbDomain                => 'oracle.com',
