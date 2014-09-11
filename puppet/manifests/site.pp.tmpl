@@ -165,12 +165,14 @@ node '$slave3_name.localdomain' inherits default {
     ensure => directory,
   }
   ->
-  file{'/home/vagrant/oracle_distribs/linux.x64_11gR2_database_1of2.zip':
+  file{'zip1':
+    path   => '/home/vagrant/oracle_distribs/linux.x64_11gR2_database_1of2.zip',
     ensure => file,
     source => "puppet:///modules/oradb/linux.x64_11gR2_database_1of2.zip"
   }
   ->
-  file{'/home/vagrant/oracle_distribs/linux.x64_11gR2_database_2of2.zip':
+  file{'zip2':
+    path   => '/home/vagrant/oracle_distribs/linux.x64_11gR2_database_2of2.zip',
     ensure => file,
     source => "puppet:///modules/oradb/linux.x64_11gR2_database_2of2.zip"
   }
@@ -188,7 +190,6 @@ node '$slave3_name.localdomain' inherits default {
     group_oper             => 'oper',
     createUser             => true,
     downloadDir            => '/home/vagrant/oracle_distribs/',
-    zipExtract             => false,
   }
   ->
   oradb::net{ 'config net8':
