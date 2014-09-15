@@ -113,7 +113,7 @@ class Executor {
         resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
         sleep(10000)
-        //waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand())
+        waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand())
         this
     }
 

@@ -220,6 +220,11 @@ node '$slave3_name.localdomain' inherits default {
     databaseType            => "MULTIPURPOSE",
     emConfiguration         => "NONE",    
   }  
+  ->
+  oradb::dbactions{'start_db':
+    oracleHome => '/oracle/product/11.2/db',
+    dbName     => 'test',
+  }
 
 
   class { 'glassfish':
