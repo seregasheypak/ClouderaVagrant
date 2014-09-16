@@ -161,12 +161,18 @@ node '$slave3_name.localdomain' inherits default {
     password => postgresql_password('scoring_service_user', 'scoring_service_user'),
   }   
   
+  #also this variables are used in template
+  $oracleBase='/oracle'
+  $oracleHome='/oracle/product/11.2/db'
+  $oracleUnqname='TEST'
+  $oracleSid='test'
+
   oradb::installdb{ '11gR2':
     version                => '11.2.0.1',
     file                   => 'linux.x64_11gR2_database',
     databaseType           => 'SE',
-    oracleBase             => '/oracle',
-    oracleHome             => '/oracle/product/11.2/db',
+    oracleBase             => $oracleBase,
+    oracleHome             => $oracleHome,
     bashProfile            => true,
     user                   => 'oracle',
     group                  => 'dba',
@@ -176,31 +182,31 @@ node '$slave3_name.localdomain' inherits default {
   }
   ->
   oradb::net{ 'config net8':
-    oracleHome   => '/oracle/product/11.2/db',
+    oracleHome   => $oracleHome,
     version      => '11.2',
     user         => 'oracle',
     group        => 'dba',    
   }
   ->
   oradb::listener{'stop listener':
-    oracleBase   => '/oracle',
-    oracleHome   => '/oracle/product/11.2/db',
+    oracleBase   => $oracleBase,
+    oracleHome   => $oracleHome,
     user         => 'oracle',
     group        => 'dba',
     action       => 'start',  
   }
   ->
   oradb::listener{'start listener':
-    oracleBase   => '/oracle',
-    oracleHome   => '/oracle/product/11.2/db',
+    oracleBase   => $oracleBase,
+    oracleHome   => $oracleHome,
     user         => 'oracle',
     group        => 'dba',
     action       => 'start',  
   }
   ->
   oradb::database{ 'testDb_Create':
-    oracleBase              => '/oracle',
-    oracleHome              => '/oracle/product/11.2/db',
+    oracleBase              => $oracleBase,
+    oracleHome              => $oracleHome,
     version                 => '11.2',
     user                    => 'oracle',
     group                   => 'dba',  
@@ -220,6 +226,11 @@ node '$slave3_name.localdomain' inherits default {
     databaseType            => "MULTIPURPOSE",
     emConfiguration         => "NONE",    
   }  
+  ->
+  file{'/etc/environment':
+    ensure  =>file,
+    content => template("oradb/environment.erb"), 
+  }
   ->
   oradb::sqlplus{"create user TEST identified by TESTpassword;":}
   ->
