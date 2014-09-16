@@ -221,13 +221,13 @@ node '$slave3_name.localdomain' inherits default {
     emConfiguration         => "NONE",    
   }  
   ->
-  oradb::sqlplus{"create user TEST identified by TESTpassword":}
+  oradb::sqlplus{"create user TEST identified by TESTpassword;":}
   ->
-  oradb::sqlplus{"grant DBA to TEST":}
+  oradb::sqlplus{"grant DBA to TEST;":}
   ->
-  oradb::sqlplus{"grant create session to TEST":}
+  oradb::sqlplus{"grant create session to TEST;":}
   ->
-  oradb::sqlplus{"grant alter session to TEST":}
+  oradb::sqlplus{"grant alter session to TEST;":}
   
 
   class { 'glassfish':
