@@ -72,17 +72,16 @@ node '$master_name.localdomain' inherits default {
   
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => '$master_name.localdomain',
+        cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,
   } 
-  ->   
-  class { 'cloudera::cm::server': }    
+      
 }
 
 node '$slave1_name.localdomain' inherits default {
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => '$master_name.localdomain',
+        cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,        
   }  
 }
@@ -90,9 +89,11 @@ node '$slave1_name.localdomain' inherits default {
 node '$slave2_name.localdomain' inherits default {
   class { 'cloudera':
         cm_version => $cm_version,
-        cm_server_host => '$master_name.localdomain',
+        cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,        
-  }  
+  } 
+  ->   
+  class { 'cloudera::cm::server': } 
   ->  
   file{'/var/lib/cloudera':
     ensure => directory,
@@ -136,14 +137,7 @@ node '$slave2_name.localdomain' inherits default {
     ensure => directory,
     owner  => 'hdfs',
     group  => 'hdfs',
-  }
-  #->
-  #exec{'/usr/bin/hadoop namenode -format':
-    #path => ['/usr/bin', '/bin'],
-   # provider => 'shell',
-   # timeout  => 0,    
-   # user     => 'hdfs',
-  #}
+  } 
 }
 
 #Postgres node, no hadoop
