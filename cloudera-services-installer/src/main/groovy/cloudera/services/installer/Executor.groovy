@@ -119,12 +119,16 @@ class Executor {
         ApiRoleNameList apiRoleNameList = new ApiRoleNameList();
         apiRoleNameList.setRoleNames([HDFS.NAMENODE + "-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}"])
         waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand(apiRoleNameList))
+        waitCommandExecuted(resource.startCommand(HDFS.SERVICE_NAME))
         this
     }
 
     def createMapReduce() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new MapReduce().build())
+        ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
+        resource.createServices(new MapReduce().build())
         LOG.info 'MapReduce service has been created'
+        sleep(1000)
+        waitCommandExecuted(resource.startCommand(MapReduce.SERVICE_NAME))
         this
     }
 
