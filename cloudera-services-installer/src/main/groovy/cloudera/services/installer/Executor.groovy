@@ -11,8 +11,10 @@ import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
 import com.cloudera.api.model.ApiCommand
+import com.cloudera.api.model.ApiCommandList
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
+import com.cloudera.api.model.ApiRoleNameList
 import com.cloudera.api.v4.ServicesResourceV4
 import com.cloudera.api.v5.RootResourceV5
 
@@ -113,7 +115,10 @@ class Executor {
         resource.createServices(new HDFS().build())
         LOG.info 'HDFS service has been created'
         sleep(10000)
-        waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand())
+
+        ApiRoleNameList apiRoleNameList = new ApiRoleNameList();
+        apiRoleNameList.setRoleNames([HDFS.NAMENODE + "-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}"])
+        waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand(apiRoleNameList))
         this
     }
 
@@ -167,7 +172,7 @@ class Executor {
     }
 
 
-    def deployClusterWideClientsConfig(){
+    def deployClusterWideClientsConfig() {
         LOG.info "Deploy cluster wide configuration "
         waitCommandExecuted(root.clustersResource.deployClientConfig(Cluster.name))
         this
@@ -181,6 +186,13 @@ class Executor {
                 System.getProperty('scm.password', 'admin'))
                 .build()
                 .getRootV5()
+    }
+
+    void waitCommandExecuted(ApiCommandList list, long timeout = 5 * 60 * 1000) {
+        List<ApiCommand> commands = list.getCommands();
+        for (ApiCommand command : commands) {
+            waitCommandExecuted(command, timeout);
+        }
     }
 
     //default timeout = 5 minutes
