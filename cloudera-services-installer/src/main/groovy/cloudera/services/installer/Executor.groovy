@@ -10,10 +10,16 @@ import cloudera.services.installer.model.Sqoop
 import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
+import com.cloudera.api.model.ApiCluster
+import com.cloudera.api.model.ApiClusterList
 import com.cloudera.api.model.ApiCommand
 import com.cloudera.api.model.ApiCommandList
+import com.cloudera.api.model.ApiConfig
+import com.cloudera.api.model.ApiConfigList
 import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
+import com.cloudera.api.model.ApiHostRef
+import com.cloudera.api.model.ApiHostRefList
 import com.cloudera.api.model.ApiRoleNameList
 import com.cloudera.api.v4.ServicesResourceV4
 import com.cloudera.api.v5.RootResourceV5
@@ -37,11 +43,24 @@ class Executor {
 
     private static final Logger LOG = LoggerFactory.getLogger(Executor.class)
 
-    private final RootResourceV5 root = createRoot()
+    private final RootResourceV5 root
+    private final Map yamlConfig
 
+    public Executor(Map yamlConfig) {
+        this.yamlConfig = yamlConfig
+        root = new ClouderaManagerClientBuilder()
+                .withHost(yamlConfig['scm']['host'])
+                .withUsernamePassword(yamlConfig['scm']['username'], yamlConfig['scm']['password'])
+                .build()
+                .getRootV5()
+    }
 
     def configureScm() {
-        root.clouderaManagerResource.updateConfig(new ScmConf().build())
+        ApiConfigList apiConfigList = new ApiConfigList()
+        apiConfigList.add(new ApiConfig(name: 'remote_parcel_repo_urls', value: yamlConfig['parcel_repos'].join(',')))
+        apiConfigList.add(new ApiConfig(name: 'distribute_parcels_automatically', value: 'false'))
+        apiConfigList.add(new ApiConfig(name: 'download_parcels_automatically', value: 'false'))
+        root.clouderaManagerResource.updateConfig(apiConfigList)
         LOG.info 'scm config has been updated'
         this
     }
@@ -67,22 +86,33 @@ class Executor {
     }
 
     def createCluster() {
-        def cluster = new Cluster()
+        String clusterName = yamlConfig['scm']['cluster_name']
+        String clusterVersion = yamlConfig['scm']['cluster_version']
+
+        ApiClusterList apiClusterList = new ApiClusterList()
+        apiClusterList.add(new ApiCluster(name: clusterName, version: clusterVersion))
         if (root.clustersResource
                 .readClusters(DataView.EXPORT)
-                .find { existingCluster -> existingCluster.name == cluster.name } == null) {
+                .find { existingCluster -> existingCluster.name == clusterName } == null) {
 
-            root.clustersResource.createClusters(cluster.build())
-            LOG.info "Cluster with name: $cluster.name has been created"
+            root.clustersResource.createClusters(apiClusterList)
+            LOG.info "Cluster with name: $clusterName has been created"
         } else {
-            LOG.info "Cluster with name: $cluster.name already exisits"
+            LOG.info "Cluster with name: $clusterName already exisits"
         }
         this
     }
 
     def addHosts() {
         ApiHostList existingHosts = root.getHostsResource().readHosts(DataView.EXPORT)
-        def newHosts = Hosts.getInstance().build()
+        ApiHostList newHosts = new ApiHostList()
+        ApiHostRefList clusterHosts = new ApiHostRefList()
+        yamlConfig['hosts'].each {
+            newHosts.add(new ApiHost(hostId: it.name, hostname: it.name, ipAddress: it.ip))
+            clusterHosts.add(new ApiHostRef(hostId: it.name))
+        }
+
+
 
         for (ApiHost existingHost : existingHosts.getHosts()) {
             Iterator<ApiHost> newHostsIt = newHosts.getHosts().iterator()
@@ -103,9 +133,12 @@ class Executor {
             LOG.info 'All hosts are registered'
         }
 
-        println 'root.clustersResource.listHosts(Cluster.name)::: ' + root.clustersResource.listHosts(Cluster.name)
-        def hosts = root.clustersResource.addHosts(Cluster.name, new ClusterHosts().build())
-        println hosts
+        String clusterName = yamlConfig['scm']['cluster_name']
+        LOG.info 'root.clustersResource.listHosts(Cluster.name)::: ' + root.clustersResource.listHosts(clusterName)
+
+
+        def hosts = root.clustersResource.addHosts(clusterName, clusterHosts)
+        LOG.info hosts
         LOG.info 'Hosts have been added to cluster'
         this
     }
@@ -182,15 +215,6 @@ class Executor {
         this
     }
 
-
-    def createRoot() {
-        new ClouderaManagerClientBuilder()
-                .withHost(System.getProperty('scm.host', Hosts.getInstance().HOST_03))
-                .withUsernamePassword(System.getProperty('scm.username', 'admin'),
-                System.getProperty('scm.password', 'admin'))
-                .build()
-                .getRootV5()
-    }
 
     void waitCommandExecuted(ApiCommandList list, long timeout = 5 * 60 * 1000) {
         List<ApiCommand> commands = list.getCommands();

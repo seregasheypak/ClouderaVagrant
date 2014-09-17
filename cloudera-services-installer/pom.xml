@@ -83,6 +83,17 @@
 
     <dependencies>
         <dependency>
+            <groupId>org.yaml</groupId>
+            <artifactId>snakeyaml</artifactId>
+            <version>1.14</version>
+        </dependency>
+        <dependency>
+            <groupId>org.testng</groupId>
+            <artifactId>testng</artifactId>
+            <version>6.8.7</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
             <groupId>com.cloudera.api</groupId>
             <artifactId>cloudera-manager-api</artifactId>
             <!--<version>4.8.0</version> -->
