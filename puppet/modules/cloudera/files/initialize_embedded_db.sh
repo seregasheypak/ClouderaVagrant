@@ -82,7 +82,7 @@ create_database()
   $DB_CMD --command "CREATE DATABASE $DBNAME OWNER $DBNAME;"
   fail_or_continue $? "Unable to create database $DBNAME"
 
-  $DB_CMD --command "CREATE ROLE hive LOGIN PASSWORS 'hivePassword';"
+  $DB_CMD --command "CREATE ROLE hive LOGIN PASSWORD 'hivePassword';"
   fail_or_continue $? "Unable to create role hive"
   $DB_CMD --command "CREATE DATABASE metastore OWNER hive;"
   fail_or_continue $? "Unable to create database metastore"

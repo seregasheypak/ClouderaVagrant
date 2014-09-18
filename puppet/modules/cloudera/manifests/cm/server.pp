@@ -206,7 +206,7 @@ class cloudera::cm::server (
       file{'/usr/share/cmf/bin/initialize_embedded_db.sh':
         ensure => file,
         source => 'puppet:///modules/cloudera/initialize_embedded_db.sh',
-        mode => '0700',
+        mode => '0555',
       }
       ->
       service { 'cloudera-scm-server-db':
