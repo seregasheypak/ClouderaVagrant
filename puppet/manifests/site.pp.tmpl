@@ -93,7 +93,9 @@ node '$slave2_name.localdomain' inherits default {
         use_parcels    => true,        
   } 
   ->   
-  class { 'cloudera::cm::server': } 
+  class { 'cloudera::cm::server': 
+    
+  } 
   ->  
   file{'/var/lib/cloudera':
     ensure => directory,
@@ -127,7 +129,7 @@ node '$slave2_name.localdomain' inherits default {
   }
   ->
   exec {'run_cloudera_installer':
-    command => 'java -yaml.location=/var/lib/cloudera/lib/configuration.yaml -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
+    command => 'java -Dyaml.location=/var/lib/cloudera/lib/configuration.yaml -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
     path => ['/usr/java/default', '/usr/bin'],
     cwd => '/var/lib/cloudera/lib/',
     timeout => 0,    
