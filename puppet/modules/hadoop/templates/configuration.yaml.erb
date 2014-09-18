@@ -1,0 +1,172 @@
+---
+hosts:
+  - &host1
+    name: <%= @host1_name %>
+    ip: <%= @host1_ip %>
+  - &host2
+    name: <%= @host2_name %>
+    ip: <%= @host2_ip %>
+  - &host3
+    name: <%= @host3_name %>
+    ip: <%= @host3_ip %>
+
+parcels:
+  - name: CDH
+    version: 4.6.0-1.cdh4.6.0.p0.26
+  - name: IMPALA
+    version: 1.2.4-1.p0.110
+parcel_repos:
+  - 'http://archive.cloudera.com/cdh4/parcels/4.6.0.26/'
+  - 'http://archive.cloudera.com/impala/parcels/1.2.4/'
+scm:
+    host: *host3
+    username: admin
+    password: admin
+    cluster_name: cloudera-cluster
+    cluster_version: CDH4
+services:
+  - type: HDFS
+    display_name: HDFS01
+    service_wide_config:
+        dfs_block_local_path_access_user: impala
+    roles:
+      - type: NAMENODE
+        dfs_name_dir_list: /dfs/nn
+        dfs_namenode_servicerpc_address: 8022
+        namenode_java_heapsize: 268435456
+        hosts: 
+          - *host3
+      - type: SECONDARYNAMENODE
+        fs_checkpoint_dir_list: /dfs/snn
+        secondary_namenode_java_heapsize: 268435456
+        hosts:
+          - *host2
+      - type: DATANODE
+        datanode_java_heapsize: 134217728
+        dfs_data_dir_list: /dfs/dn
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+      - type: GATEWAY
+        dfs_client_use_trash: true
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+  - type: MAPREDUCE
+    display_name: MAPREDUCE01
+    service_wide_config:
+        hdfs_service: HDFS01
+    roles:
+      - type: JOBTRACKER
+        jobtracker_java_heapsize: 133978584
+        jobtracker_mapred_local_dir_list: /mapred/jt
+        mapred_job_tracker_handler_count: 22
+        hosts:
+          - *host2
+      - type: TASKTRACKER
+        mapred_tasktracker_map_tasks_maximum: 6
+        mapred_tasktracker_reduce_tasks_maximum: 3
+        task_tracker_java_heapsize: 200967876
+        tasktracker_mapred_local_dir_list: /mapred/local
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+      - type: GATEWAY
+        io_sort_mb: 50
+        mapred_child_java_opts_max_heap: 133978584
+        mapred_submit_replication: 1
+        mapred_reduce_tasks: 3
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+  - type: OOZIE
+    display_name: OOZIE01
+    service_wide_config:
+        mapreduce_yarn_service: MAPREDUCE01
+    roles:
+      - type: OOZIE_SERVER
+        hosts:
+          - *host2
+  - type: ZOOKEEPER
+    display_name: ZOOKEEPER01
+    roles:
+      - type: SERVER
+        zookeeper_server_java_heapsize: 160774301
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+  - type: HBASE
+    display_name: HBASE01
+    service_wide_config:
+        hdfs_service: HDFS01
+        zookeeper_service: ZOOKEEPER01
+    roles:
+      - type: MASTER
+        hosts:
+          - *host1
+      - type: REGIONSERVER
+        hosts:
+          - *host1
+      - type: HBASERESTSERVER
+        hosts:
+          - *host1
+      - type: HBASETHRIFTSERVER
+        hosts:
+          - *host1
+      - type: GATEWAY
+        hosts:
+          - *host1
+  - type: HIVE
+    display_name: HIVE01
+    service_wide_config:
+        zookeeper_service: ZOOKEEPER01
+        mapreduce_yarn_service: MAPREDUCE01
+    roles:
+      - type: HIVESERVER2
+        hosts:
+          - *host3
+      - type: HIVEMETASTORE
+        hosts:
+          - *host3
+      - type: WEBHCAT
+        hosts:
+          - *host3
+      - type: GATEWAY
+        hosts:
+          - *host1
+          - *host2
+          - *host3
+  - type: IMPALA
+    display_name: IMPALA01
+    service_wide_config:
+        hbase_service: HBASE01
+        hdfs_service: HDFS01
+        hive_service: HIVE01
+    roles:
+      - type: IMPALAD
+        hosts:
+          - *host2
+      - type: CATALOGSERVER
+        hosts:
+          - *host2
+      - type: STATESTORE
+        hosts:
+          - *host3
+  - type: SQOOP
+    display_name: SQOOP01
+    service_wide_config:
+        mapreduce_yarn_service: MAPREDUCE01
+    roles:
+      - type: SQOOP_SERVER
+        sqoop_java_heapsize: 923754052
+        hosts:
+          - *host1
+
+
+
+

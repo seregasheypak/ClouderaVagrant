@@ -1,5 +1,6 @@
 package cloudera.services.installer.model
 
+import cloudera.services.installer.ServiceYamlBuilder
 import com.cloudera.api.model.ApiService
 import com.cloudera.api.model.ApiServiceList
 import org.testng.Assert

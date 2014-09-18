@@ -38,7 +38,6 @@ class Main {
                     .createHive()
                     .createImpala()
                     .createSqoop()
-                    //.createHue()
                     //.deployClusterWideClientsConfig()
         }catch(BadRequestException ex){
 

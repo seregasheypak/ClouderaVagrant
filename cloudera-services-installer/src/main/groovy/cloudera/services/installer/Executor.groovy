@@ -1,13 +1,5 @@
 package cloudera.services.installer
 
-import cloudera.services.installer.model.HBase
-import cloudera.services.installer.model.Hive
-import cloudera.services.installer.model.Hue
-import cloudera.services.installer.model.Impala
-import cloudera.services.installer.model.MapReduce
-import cloudera.services.installer.model.Oozie
-import cloudera.services.installer.model.Sqoop
-import cloudera.services.installer.model.Zookeeper
 import com.cloudera.api.ClouderaManagerClientBuilder
 import com.cloudera.api.DataView
 import com.cloudera.api.model.ApiCluster
@@ -20,16 +12,14 @@ import com.cloudera.api.model.ApiHost
 import com.cloudera.api.model.ApiHostList
 import com.cloudera.api.model.ApiHostRef
 import com.cloudera.api.model.ApiHostRefList
+import com.cloudera.api.model.ApiRole
+
 import com.cloudera.api.model.ApiRoleNameList
+import com.cloudera.api.model.ApiService
+import com.cloudera.api.model.ApiServiceList
 import com.cloudera.api.v4.ServicesResourceV4
 import com.cloudera.api.v5.RootResourceV5
 
-import cloudera.services.installer.model.Cluster
-import cloudera.services.installer.model.ScmConf
-import cloudera.services.installer.model.Hosts
-import cloudera.services.installer.model.HDFS
-import cloudera.services.installer.utility.ParcelActivator
-import cloudera.services.installer.model.ClusterHosts
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 
@@ -45,14 +35,18 @@ class Executor {
 
     private final RootResourceV5 root
     private final Map yamlConfig
+    private final String clusterName
+    private final ServiceYamlBuilder serviceYamlBuilder
 
     public Executor(Map yamlConfig) {
         this.yamlConfig = yamlConfig
-        root = new ClouderaManagerClientBuilder()
+        this.root = new ClouderaManagerClientBuilder()
                 .withHost(yamlConfig['scm']['host'])
                 .withUsernamePassword(yamlConfig['scm']['username'], yamlConfig['scm']['password'])
                 .build()
                 .getRootV5()
+        this.clusterName = yamlConfig['scm']['cluster_name']
+        this.serviceYamlBuilder = new ServiceYamlBuilder(yamlConfig)
     }
 
     def configureScm() {
@@ -66,12 +60,12 @@ class Executor {
     }
 
     def activateParcels() {
-        new ParcelActivator(products: ScmConf.PRODUCTS, root: root, clusterName: Cluster.name).activate()
+        new ParcelActivator(clusterName, root, yamlConfig['parcels']).activate()
         this
     }
 
     def stopCluster() {
-        def delCommand = root.clustersResource.stopCommand(Cluster.name)
+        def delCommand = root.clustersResource.stopCommand(clusterName)
 
         println delCommand
 
@@ -80,13 +74,12 @@ class Executor {
     }
 
     def deleteCluster() {
-        root.clustersResource.deleteCluster(Cluster.name)
-        LOG.info "Cluster: $Cluster.name has been deleted"
+        root.clustersResource.deleteCluster(clusterName)
+        LOG.info "Cluster: $clusterName has been deleted"
         this
     }
 
     def createCluster() {
-        String clusterName = yamlConfig['scm']['cluster_name']
         String clusterVersion = yamlConfig['scm']['cluster_version']
 
         ApiClusterList apiClusterList = new ApiClusterList()
@@ -133,7 +126,6 @@ class Executor {
             LOG.info 'All hosts are registered'
         }
 
-        String clusterName = yamlConfig['scm']['cluster_name']
         LOG.info 'root.clustersResource.listHosts(Cluster.name)::: ' + root.clustersResource.listHosts(clusterName)
 
 
@@ -144,74 +136,81 @@ class Executor {
     }
 
     def createHDFS() {
-        ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
-        resource.createServices(new HDFS().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HDFS')
+        ServicesResourceV4 resource = root.clustersResource.getServicesResource(clusterName)
+        resource.createServices(apiServiceList)
         LOG.info 'HDFS service has been created'
         sleep(10000)
 
+        ApiService hdfsService = apiServiceList.services.get(0)
+        ApiRole nameNode = hdfsService.roles.find {
+            apiRole ->
+                apiRole.type.equals('NAMENODE')
+        }
         ApiRoleNameList apiRoleNameList = new ApiRoleNameList();
-        apiRoleNameList.setRoleNames([HDFS.NAMENODE + "-${Hosts.asRoleNameSuffix(Hosts.getInstance().HOST_03)}"])
-        waitCommandExecuted(resource.getRoleCommandsResource(HDFS.SERVICE_NAME).formatCommand(apiRoleNameList))
-        waitCommandExecuted(resource.startCommand(HDFS.SERVICE_NAME))
+        apiRoleNameList.setRoleNames([nameNode.name])
+        waitCommandExecuted(resource.getRoleCommandsResource(hdfsService.displayName).formatCommand(apiRoleNameList))
+        waitCommandExecuted(resource.startCommand(hdfsService.displayName))
         this
     }
 
     def createMapReduce() {
-        ServicesResourceV4 resource = root.clustersResource.getServicesResource(new Cluster().name)
-        resource.createServices(new MapReduce().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('MAPREDUCE')
+        ServicesResourceV4 resource = root.clustersResource.getServicesResource(clusterName)
+        resource.createServices(apiServiceList)
         LOG.info 'MapReduce service has been created'
         sleep(1000)
-        waitCommandExecuted(resource.startCommand(MapReduce.SERVICE_NAME))
+        waitCommandExecuted(resource.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
 
     def createOozie() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Oozie().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('OOZIE')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'Oozie service has been created'
         this
     }
 
     def createHive() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Hive().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HIVE')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'Hive service has been created'
         this
     }
 
     def createHBase() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new HBase().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HBASE')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'HBase service has been created'
         this
     }
 
     def createZookeeper() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Zookeeper().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('ZOOKEEPER')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'Zookeeper service has been created'
         this
     }
 
     def createSqoop() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Sqoop().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('SQOOP')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'Sqoop service has been created'
         this
     }
 
     def createImpala() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Impala().build())
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('IMPALA')
+        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
         LOG.info 'Impala service has been created'
-        this
-    }
-
-    def createHue() {
-        root.clustersResource.getServicesResource(new Cluster().name).createServices(new Hue().build())
-        LOG.info 'Hue service has been created'
         this
     }
 
 
     def deployClusterWideClientsConfig() {
         LOG.info "Deploy cluster wide configuration "
-        waitCommandExecuted(root.clustersResource.deployClientConfig(Cluster.name))
+        waitCommandExecuted(root.clustersResource.deployClientConfig(clusterName))
         this
     }
 
