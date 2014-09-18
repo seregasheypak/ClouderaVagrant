@@ -62,7 +62,7 @@ class ServiceYamlBuilder {
                     if (propName.equals('type') || propName.equals('hosts')) {
                         continue
                     }
-                    apiConfigs.add(new ApiConfig(name: propName, value: serviceAsMap[propName]))
+                    apiConfigs.add(new ApiConfig(name: propName, value: roleAsMap[propName]))
                 }
                 roleConfigGroup.config = new ApiConfigList(apiConfigs)
 
