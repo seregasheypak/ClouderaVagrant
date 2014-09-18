@@ -202,13 +202,17 @@ class cloudera::cm::server (
         creates => '/etc/cloudera-scm-server/db.mgmt.properties',
         require => Package['cloudera-manager-server-db'],
       }
-
+      ->
+      file{'/usr/share/cmf/bin/initialize_embedded_db.sh':
+        ensure => file,
+        source => 'puppet:///modules/cloudera/initialize_embedded_db.sh',
+      }
+      ->
       service { 'cloudera-scm-server-db':
         ensure     => $service_ensure_real,
         enable     => $service_enable,
         hasrestart => true,
-        hasstatus  => true,
-        require    => Exec['cloudera-manager-server-db'],
+        hasstatus  => true,        
         before     => Service['cloudera-scm-server'],
       }
     }

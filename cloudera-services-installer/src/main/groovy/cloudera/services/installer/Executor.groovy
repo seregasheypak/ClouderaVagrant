@@ -41,7 +41,7 @@ class Executor {
     public Executor(Map yamlConfig) {
         this.yamlConfig = yamlConfig
         this.root = new ClouderaManagerClientBuilder()
-                .withHost(yamlConfig['scm']['host']['name'])
+                .withHost(yamlConfig['scm']['host']['ip'])
                 .withUsernamePassword(yamlConfig['scm']['username'], yamlConfig['scm']['password'])
                 .build()
                 .getRootV5()
