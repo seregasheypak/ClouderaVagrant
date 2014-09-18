@@ -123,10 +123,6 @@ services:
           - *host1
   - type: HIVE
     display_name: HIVE01
-    custom:
-        postgres_pass_file: /var/lib/cloudera-scm-server-db/data/generated_password.txt
-        postgres_username: hive
-        postgres_database: metastore
     service_wide_config:
         zookeeper_service: ZOOKEEPER01
         mapreduce_yarn_service: MAPREDUCE01
