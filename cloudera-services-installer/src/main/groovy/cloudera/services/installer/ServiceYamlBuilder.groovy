@@ -73,7 +73,7 @@ class ServiceYamlBuilder {
                     host ->
                         ApiRole apiRole = new ApiRole(roleConfigGroupRef: new ApiRoleConfigGroupRef(roleConfigGroupName: roleConfigGroup.name),
                                 hostRef: new ApiHostRef(hostId: host.name),
-                                name: roleConfigGroup.roleType + "-" + asRoleNameSuffix(host.name),
+                                name: ourService.name + roleConfigGroup.roleType + "-" + asRoleNameSuffix(host.name),
                                 type: roleConfigGroup.roleType)
                         apiRoles.add(apiRole)
                 }
