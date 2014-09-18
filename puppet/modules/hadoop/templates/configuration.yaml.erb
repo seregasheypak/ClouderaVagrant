@@ -9,7 +9,7 @@ hosts:
   - &host3
     name: <%= @host3_name %>
     ip: <%= @host3_ip %>
-
+install: all
 parcels:
   - name: CDH
     version: 4.6.0-1.cdh4.6.0.p0.26
@@ -17,7 +17,7 @@ parcels:
     version: 1.2.4-1.p0.110
 parcel_repos:
   - 'http://archive.cloudera.com/cdh4/parcels/4.6.0.26/'
-  - 'http://archive.cloudera.com/impala/parcels/1.2.4/'
+  - 'http://archive.cloudera.com/impala/parcels/1.2.4/'  
 scm:
     host: *host3
     username: admin

@@ -136,6 +136,7 @@ class Executor {
     }
 
     def createHDFS() {
+        LOG.info 'creating hdfs'
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HDFS')
         ServicesResourceV4 resource = root.clustersResource.getServicesResource(clusterName)
         resource.createServices(apiServiceList)
