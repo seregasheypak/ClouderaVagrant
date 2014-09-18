@@ -94,8 +94,12 @@ node '$slave2_name.localdomain' inherits default {
   } 
   ->   
   class { 'cloudera::cm::server': 
-    
-  } 
+
+  }
+  -> 
+  exec{'sleep 60':
+    path => ['/bin'],
+  }
   ->  
   file{'/var/lib/cloudera':
     ensure => directory,

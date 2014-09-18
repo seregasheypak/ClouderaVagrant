@@ -130,7 +130,7 @@ class Executor {
 
 
         def hosts = root.clustersResource.addHosts(clusterName, clusterHosts)
-        LOG.info hosts
+        LOG.info hosts.toString()
         LOG.info 'Hosts have been added to cluster'
         this
     }
