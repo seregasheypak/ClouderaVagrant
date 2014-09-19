@@ -52,6 +52,7 @@ class Main {
         } catch (Exception ex) {
 
             ex.printStackTrace()
+            LOG.error('Critical error',ex)
         }
 
         Thread.sleep(10000);
