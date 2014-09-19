@@ -209,6 +209,11 @@ class cloudera::cm::server (
         mode => '0555',
       }
       ->
+      append_if_no_such_line{'allow_for_hive':
+        file => '/var/lib/cloudera-scm-server-db/data/pg_hba.conf',
+        line => 'host    metastore       hive    0.0.0.0/0       md5'
+      }
+      ->
       service { 'cloudera-scm-server-db':
         ensure     => $service_ensure_real,
         enable     => $service_enable,

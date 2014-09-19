@@ -203,6 +203,7 @@ class Executor {
         servicesResourceV4.createServices(apiServiceList)
         LOG.info 'Zookeeper service has been created'
         sleep(1000)
+        waitCommandExecuted(servicesResourceV4.zooKeeperInitCommand(apiServiceList.get(0).displayName))
         waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
