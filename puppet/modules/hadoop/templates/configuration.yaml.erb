@@ -63,6 +63,61 @@ services:
         jobtracker_java_heapsize: 133978584
         jobtracker_mapred_local_dir_list: /mapred/jt
         mapred_job_tracker_handler_count: 22
+        mapred_capacity_scheduler_configuration: |
+                                                   <?xml version="1.0"?>                                                     
+                                                     <configuration>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.queue.default.capacity</name>
+                                                         <value>100</value>                                                         
+                                                        </property>
+                                                        <property>
+                                                          <name>mapred.capacity-scheduler.queue.default.maximum-capacity</name>
+                                                          <value>-1</value>
+                                                        </property>
+                                                        <property>
+                                                          <name>mapred.capacity-scheduler.queue.default.supports-priority</name>
+                                                          <value>false</value>
+                                                        </property>
+                                                        <property>
+                                                          <name>mapred.capacity-scheduler.queue.default.minimum-user-limit-percent</name>
+                                                          <value>100</value>
+                                                        </property>
+                                                        <property>
+                                                          <name>mapred.capacity-scheduler.queue.default.maximum-initialized-jobs-per-user</name>
+                                                          <value>2</value>
+                                                       </property>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.default-supports-priority</name>
+                                                         <value>false</value>
+                                                       </property>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.default-minimum-user-limit-percent</name>
+                                                         <value>100</value>
+                                                       </property>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.default-maximum-initialized-jobs-per-user</name>
+                                                         <value>2</value>
+                                                       </property>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.init-poll-interval</name>
+                                                         <value>5000</value>
+                                                       </property>
+                                                       <property>
+                                                         <name>mapred.capacity-scheduler.init-worker-threads</name>
+                                                         <value>5</value>
+                                                       </property>
+                                                     </configuration>
+        mapred_fairscheduler_allocation: |
+                                           <?xml version="1.0"?>
+                                           <allocations>
+                                             <pool name="default"></pool>
+                                             <pool name="online"></pool>
+                                             <userMaxJobsDefault>50</userMaxJobsDefault>
+                                             <poolMaxJobsDefault>50</poolMaxJobsDefault>
+                                             <defaultPoolSchedulingMode>fair</defaultPoolSchedulingMode>
+                                           </allocations>
+        mapred_fairscheduler_poolnameproperty: mapred.job.queue.name
+        mapred_queue_names_list: default,online
         hosts:
           - *host2
       - type: TASKTRACKER
@@ -89,12 +144,16 @@ services:
         mapreduce_yarn_service: MAPREDUCE01
     roles:
       - type: OOZIE_SERVER
+        oozie_config_safety_valve: |
+                                     <property><name>oozie.service.HadoopAccessorService.jobTracker.whitelist</name><value><%= @host1_ip %>:8021,<%= @host2_ip %>:8021,<%= @host3_ip %>:8021,<%= @host1_name %>:8021,<%= @host2_name %>:8021,<%= @host3_name %>:8021</value></property>
+                                     <property><name>oozie.service.HadoopAccessorService.nameNode.whitelist</name><value><%= @host1_ip %>:8020,<%= @host2_ip %>:8020,<%= @host3_ip %>:8020,<%= @host1_name %>:8020,<%= @host2_name %>:8020,<%= @host3_name %>:8020</value></property>
         hosts:
           - *host2
   - type: ZOOKEEPER
     display_name: ZOOKEEPER01
     roles:
       - type: SERVER
+        maxSessionTimeout: 60000
         zookeeper_server_java_heapsize: 160774301
         hosts:
           - *host1
@@ -126,8 +185,25 @@ services:
     service_wide_config:
         zookeeper_service: ZOOKEEPER01
         mapreduce_yarn_service: MAPREDUCE01
+        hive_metastore_database_host: <%= @host3_ip %>
+        hive_metastore_database_password: hivePassword
+        hive_metastore_database_port: 7432
+        hive_metastore_database_type: postgresql
     roles:
       - type: HIVESERVER2
+        hive_hs2_config_safety_valve: |
+                                        <property>
+                                          <name>hbase.zookeeper.quorum</name>
+                                          <value><%= @host1_name %>,<%= @host2_name %>,<%= @host3_name %></value>
+                                        </property>
+                                        <property>
+                                          <name>hbase.zookeeper.property.clientPort</name>
+                                          <value>2181</value>
+                                        </property>
+                                        <property>
+                                          <name>hive.aux.jars.path</name>
+                                          <value>/usr/lib/hive/lib/hbase-0.94.15-cdh4.6.0.jar,/usr/lib/hive/lib/hive-hbase-handler-0.10.0-cdh4.6.0.jar,/usr/lib/hive/lib/zookeeper-3.4.5-cdh4.6.0.jar,/usr/lib/hive/lib/guava-11.0.2.jar</value>
+                                        </property>
         hosts:
           - *host3
       - type: HIVEMETASTORE

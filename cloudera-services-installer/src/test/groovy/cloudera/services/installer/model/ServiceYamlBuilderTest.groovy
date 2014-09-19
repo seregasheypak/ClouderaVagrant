@@ -14,6 +14,7 @@ class ServiceYamlBuilderTest {
     @Test
     public void buildService(){
         Map yamlConfig = (Map) yaml.load(new File(TEST_DATA, 'configuration.yaml').text)
+        println yamlConfig
         ServiceYamlBuilder builder = new ServiceYamlBuilder(yamlConfig)
         ApiServiceList service = builder.buildService('HDFS')
         ApiService hdfs = service.get(0)

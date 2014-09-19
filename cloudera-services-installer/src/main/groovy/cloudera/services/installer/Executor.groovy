@@ -34,6 +34,7 @@ class Executor {
     private static final Logger LOG = LoggerFactory.getLogger(Executor.class)
 
     private final RootResourceV5 root
+    private final ServicesResourceV4 servicesResourceV4
     private final Map yamlConfig
     private final String clusterName
     private final ServiceYamlBuilder serviceYamlBuilder
@@ -45,6 +46,8 @@ class Executor {
                 .withUsernamePassword(yamlConfig['scm']['username'], yamlConfig['scm']['password'])
                 .build()
                 .getRootV5()
+
+        servicesResourceV4 = root.clustersResource.getServicesResource(clusterName)
         this.clusterName = yamlConfig['scm']['cluster_name']
         this.serviceYamlBuilder = new ServiceYamlBuilder(yamlConfig)
     }
@@ -138,8 +141,8 @@ class Executor {
     def createHDFS() {
         LOG.info 'creating hdfs'
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HDFS')
-        ServicesResourceV4 resource = root.clustersResource.getServicesResource(clusterName)
-        resource.createServices(apiServiceList)
+
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'HDFS service has been created'
         sleep(10000)
 
@@ -150,61 +153,75 @@ class Executor {
         }
         ApiRoleNameList apiRoleNameList = new ApiRoleNameList();
         apiRoleNameList.setRoleNames([nameNode.name])
-        waitCommandExecuted(resource.getRoleCommandsResource(hdfsService.displayName).formatCommand(apiRoleNameList))
-        waitCommandExecuted(resource.startCommand(hdfsService.displayName))
+        waitCommandExecuted(servicesResourceV4.getRoleCommandsResource(hdfsService.displayName).formatCommand(apiRoleNameList))
+        waitCommandExecuted(servicesResourceV4.startCommand(hdfsService.displayName))
         this
     }
 
     def createMapReduce() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('MAPREDUCE')
-        ServicesResourceV4 resource = root.clustersResource.getServicesResource(clusterName)
-        resource.createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'MapReduce service has been created'
         sleep(1000)
-        waitCommandExecuted(resource.startCommand(apiServiceList.get(0).displayName))
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
 
     def createOozie() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('OOZIE')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         LOG.info 'Oozie service has been created'
         this
     }
 
     def createHive() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HIVE')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'Hive service has been created'
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.hiveCreateMetastoreDatabaseCommand(apiServiceList.get(0).displayName))
+        waitCommandExecuted(servicesResourceV4.createHiveUserDirCommand(apiServiceList.get(0).displayName))
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
     def createHBase() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('HBASE')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'HBase service has been created'
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.createHBaseRootCommand(apiServiceList.get(0).displayName))
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
     def createZookeeper() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('ZOOKEEPER')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'Zookeeper service has been created'
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
     def createSqoop() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('SQOOP')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'Sqoop service has been created'
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
     def createImpala() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('IMPALA')
-        root.clustersResource.getServicesResource(clusterName).createServices(apiServiceList)
+        servicesResourceV4.createServices(apiServiceList)
         LOG.info 'Impala service has been created'
+        sleep(1000)
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
     }
 
