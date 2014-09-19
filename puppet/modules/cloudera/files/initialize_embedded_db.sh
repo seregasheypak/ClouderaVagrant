@@ -206,6 +206,7 @@ enable_remote_connections()
   local SECONDLINE="host    all    cloudera-scm,scm 0.0.0.0/0 reject"
   local THIRDLINE="# enable remote access for other users"
   local FOURTHLINE="host    sameuser all  0.0.0.0/0   md5"
+  local FIFTHLINE="host    hive metastore  0.0.0.0/0   md5"
 
   if pg_hba_contains "$FIRSTLINE"; then
     return 0
@@ -215,6 +216,7 @@ enable_remote_connections()
   echo $SECONDLINE >> $DATA_DIR/pg_hba.conf
   echo $THIRDLINE >> $DATA_DIR/pg_hba.conf
   echo $FOURTHLINE >> $DATA_DIR/pg_hba.conf
+  echo $FIFTHLINE >> $DATA_DIR/pg_hba.conf
 
   echo "Enabled remote connections"
 }
