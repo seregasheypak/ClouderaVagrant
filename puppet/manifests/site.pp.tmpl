@@ -90,7 +90,7 @@ node '$slave1_name.localdomain' inherits default {
     source => 'puppet:///modules/hadoop/ext-2.2.zip',
   }   
   ->
-  exec{'unzip /tmp/ext-2.2.zip -d /var/lib/oozie'
+  exec{'unzip /tmp/ext-2.2.zip -d /var/lib/oozie':
     path => ['/usr/bin'],
   }
   ->
