@@ -46,7 +46,7 @@ class Main {
                         .createHive()
                         .createImpala()
                         .createSqoop()
-                //.deployClusterWideClientsConfig()
+                        .deployClusterWideClientsConfig()
             }
 
         } catch (Exception ex) {
