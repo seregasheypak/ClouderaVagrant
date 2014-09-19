@@ -404,7 +404,7 @@ EOF
 
   # Add header to pg_hba.conf.
   echo "# Accept connections from all hosts" >> $DATA_DIR/pg_hba.conf
-  echo "host    hive metastore  0.0.0.0/0   md5" >> $DATA_DIR/pg_hba.conf
+  echo "host metastore hive  0.0.0.0/0   md5" >> $DATA_DIR/pg_hba.conf
 else
   # If the DB already exists, we need to verify the existing data. Load the
   # password file, and if a DB list file does not exist, check DB_PROP_FILE
