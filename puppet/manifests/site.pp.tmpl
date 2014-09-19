@@ -99,6 +99,7 @@ node '$slave1_name.localdomain' inherits default {
     owner   => 'oozie',
     group   => 'oozie',
     recurse => true,
+    require => Class['hadoop::users_and_groups'],
   } 
 }
 
