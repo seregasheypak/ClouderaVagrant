@@ -158,6 +158,28 @@ class Executor {
         this
     }
 
+    def createZookeeper() {
+        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('ZOOKEEPER')
+        servicesResourceV4.createServices(apiServiceList)
+        LOG.info 'Zookeeper service has been created'
+        sleep(1000)
+
+        ApiService zkService = apiServiceList.services.get(0)
+        List<ApiRole> apiRoles = zkService.roles.findAll {
+            apiRole ->
+                apiRole.type.equals('SERVER')
+        }
+        List<String> roleNames = []
+        apiRoles.each {
+            roleNames.add(it.name)
+        }
+        ApiRoleNameList apiRoleNameList = new ApiRoleNameList();
+        apiRoleNameList.setRoleNames(roleNames)
+        waitCommandExecuted(servicesResourceV4.getRoleCommandsResource(zkService.displayName).zooKeeperInitCommand(apiRoleNameList))
+        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
+        this
+    }
+
     def createMapReduce() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('MAPREDUCE')
         servicesResourceV4.createServices(apiServiceList)
@@ -199,15 +221,7 @@ class Executor {
         this
     }
 
-    def createZookeeper() {
-        ApiServiceList apiServiceList = serviceYamlBuilder.buildService('ZOOKEEPER')
-        servicesResourceV4.createServices(apiServiceList)
-        LOG.info 'Zookeeper service has been created'
-        sleep(1000)
-        waitCommandExecuted(servicesResourceV4.zooKeeperInitCommand(apiServiceList.get(0).displayName))
-        waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
-        this
-    }
+
 
     def createSqoop() {
         ApiServiceList apiServiceList = serviceYamlBuilder.buildService('SQOOP')
