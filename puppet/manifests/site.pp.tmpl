@@ -83,7 +83,23 @@ node '$slave1_name.localdomain' inherits default {
         cm_version => $cm_version,
         cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,        
-  }  
+  }
+  #prepare files for oozie web console
+  file{'/tmp/ext-2.2.zip':
+    ensure => file,
+    source => 'puppet:///modules/hadoop/ext-2.2.zip',
+  }   
+  ->
+  exec{'unzip /tmp/ext-2.2.zip -d /var/lib/oozie'
+    path => ['/usr/bin'],
+  }
+  ->
+  file{'/var/lib/oozie/':
+    ensure  => directory,
+    owner   => 'oozie',
+    group   => 'oozie',
+    recurse => true,
+  } 
 }
 
 node '$slave2_name.localdomain' inherits default {

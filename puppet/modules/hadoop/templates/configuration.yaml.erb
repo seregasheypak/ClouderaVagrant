@@ -144,6 +144,7 @@ services:
         mapreduce_yarn_service: MAPREDUCE01
     roles:
       - type: OOZIE_SERVER
+        oozie_web_console: true
         oozie_config_safety_valve: |
                                      <property><name>oozie.service.HadoopAccessorService.jobTracker.whitelist</name><value><%= @host1_ip %>:8021,<%= @host2_ip %>:8021,<%= @host3_ip %>:8021,<%= @host1_name %>:8021,<%= @host2_name %>:8021,<%= @host3_name %>:8021</value></property>
                                      <property><name>oozie.service.HadoopAccessorService.nameNode.whitelist</name><value><%= @host1_ip %>:8020,<%= @host2_ip %>:8020,<%= @host3_ip %>:8020,<%= @host1_name %>:8020,<%= @host2_name %>:8020,<%= @host3_name %>:8020</value></property>
