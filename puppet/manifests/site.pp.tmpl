@@ -139,11 +139,8 @@ node '$slave2_name.localdomain' inherits default {
     timeout => 0,    
   }
   ->
-  file{'/var/lib/hadoop-hdfs':
-    ensure => directory,
-    owner  => 'hdfs',
-    group  => 'hdfs',
-  } 
+  class{'hadoop::hivelibs46':
+  }
 }
 
 #Postgres node, no hadoop

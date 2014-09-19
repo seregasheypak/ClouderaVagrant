@@ -19,9 +19,4 @@ define hadoop::hdfsdir(
         unless      => $check_owner_cmd,
         subscribe   => Exec[$mkdir_cmd],
     }
-
-/*    if ($is_virtual)
-    {
-        Class['hadoop::pseudodistributed'] -> Hadoop::Hdfsdir[$name]
-    }*/
 }

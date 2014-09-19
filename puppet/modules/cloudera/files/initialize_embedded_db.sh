@@ -206,7 +206,7 @@ enable_remote_connections()
   local SECONDLINE="host    all    cloudera-scm,scm 0.0.0.0/0 reject"
   local THIRDLINE="# enable remote access for other users"
   local FOURTHLINE="host    sameuser all  0.0.0.0/0   md5"
-  local FIFTHLINE="host    hive metastore  0.0.0.0/0   md5"
+  
 
   if pg_hba_contains "$FIRSTLINE"; then
     return 0
@@ -215,8 +215,7 @@ enable_remote_connections()
   echo $FIRSTLINE >> $DATA_DIR/pg_hba.conf
   echo $SECONDLINE >> $DATA_DIR/pg_hba.conf
   echo $THIRDLINE >> $DATA_DIR/pg_hba.conf
-  echo $FOURTHLINE >> $DATA_DIR/pg_hba.conf
-  echo $FIFTHLINE >> $DATA_DIR/pg_hba.conf
+  echo $FOURTHLINE >> $DATA_DIR/pg_hba.conf  
 
   echo "Enabled remote connections"
 }
@@ -405,6 +404,7 @@ EOF
 
   # Add header to pg_hba.conf.
   echo "# Accept connections from all hosts" >> $DATA_DIR/pg_hba.conf
+  echo "host    hive metastore  0.0.0.0/0   md5" >> $DATA_DIR/pg_hba.conf
 else
   # If the DB already exists, we need to verify the existing data. Load the
   # password file, and if a DB list file does not exist, check DB_PROP_FILE
