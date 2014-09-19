@@ -183,6 +183,7 @@ class Executor {
         LOG.info 'Hive service has been created'
         sleep(1000)
         waitCommandExecuted(servicesResourceV4.hiveCreateMetastoreDatabaseCommand(apiServiceList.get(0).displayName))
+        waitCommandExecuted(servicesResourceV4.hiveCreateMetastoreDatabaseTablesCommand(apiServiceList.get(0).displayName))
         waitCommandExecuted(servicesResourceV4.createHiveUserDirCommand(apiServiceList.get(0).displayName))
         waitCommandExecuted(servicesResourceV4.startCommand(apiServiceList.get(0).displayName))
         this
