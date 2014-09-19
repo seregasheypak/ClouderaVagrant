@@ -47,8 +47,8 @@ class Executor {
                 .build()
                 .getRootV5()
 
-        servicesResourceV4 = root.clustersResource.getServicesResource(clusterName)
         this.clusterName = yamlConfig['scm']['cluster_name']
+        servicesResourceV4 = root.clustersResource.getServicesResource(clusterName)
         this.serviceYamlBuilder = new ServiceYamlBuilder(yamlConfig)
     }
 
