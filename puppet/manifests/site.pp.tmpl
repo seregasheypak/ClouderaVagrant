@@ -54,6 +54,11 @@ node default {
       owner => 'hdfs',
 
     }
+    package { 'tzdata':
+      ensure => '2014g-1.el6',
+    }
+    include timezone::updater
+
     append_if_no_such_line { sysctl_all_ipv6:
       file => "/etc/sysctl.conf",
       line => "net.ipv6.conf.all.disable_ipv6 = 1"
