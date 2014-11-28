@@ -16,10 +16,26 @@ EOF
 mkdir -p /var/lib/hiera
 cat > /var/lib/hiera/defaults.yaml <<EOF
 ---
-zookeepers:
+kafka_zookeepers:
   - $master_name.localdomain
   - $slave1_name.localdomain
   - $slave2_name.localdomain
+kafka_install: 'yes'
+$slave4_name.localdomain
+kafka_data_dirs: &kafka_data_dirs_ref
+  - '/var/spool/kafka1'
+  - '/var/spool/kafka2'
+  - '/var/spool/kafka3'
+kafka_brokers:
+    $slave4_name.localdomain:
+        id: 1
+        port: 9092
+        data_dirs: *kafka_data_dirs_ref
+kafka_log_retention_minutes: 1440
+kafka_replica_lag_max_messages: 15000
+kafka_replica_fetch_max_bytes: 20971520
+kafka_num_replica_fetchers: 3
+controlled_shutdown_enable: 'true'
 EOF
 SCRIPT
 

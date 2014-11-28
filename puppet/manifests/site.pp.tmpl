@@ -288,12 +288,8 @@ node '$slave3_name.localdomain' inherits default {
 }
 
 node '$slave4_name.localdomain' inherits default {  
-  notify{'first':
-    message => 'test message',
-  }
-  ->
-  notify{'second':
-    message => join(hiera_array(zookeepers), ','),
+  class{"kafka::hiera":
+    kafka_version => '0.8.1.1-4.el6',
   }
 }
 

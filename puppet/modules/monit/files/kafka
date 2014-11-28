@@ -1,0 +1,4 @@
+check process kafka with pidfile /var/run/kafka/kafka.pid
+   start program = "/sbin/service kafka start"
+   stop  program = "/sbin/service kafka stop"
+   if 5 restarts within 5 cycles then unmonitor
