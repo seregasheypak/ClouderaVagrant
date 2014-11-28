@@ -272,9 +272,16 @@ node '$slave3_name.localdomain' inherits default {
     file_source => 'puppet:///modules/glassfish/scoring-service-root.crt',
     crt_alias   => 'scoring-service-root',
   } 
+}
 
-
-
+node '$slave4_name.localdomain' inherits default {  
+  notify{'first':
+    message => 'test message',
+  }
+  ->
+  notify{'second':
+    message => hiera_array(zookeepers),
+  }
 }
 
 

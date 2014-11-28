@@ -11,6 +11,15 @@ $master_ip $master_name.localdomain $master_name
 $slave1_ip $slave1_name.localdomain $slave1_name
 $slave2_ip $slave2_name.localdomain $slave2_name
 $slave3_ip $slave3_name.localdomain $slave3_name
+$slave4_ip $slave4_name.localdomain $slave4_name
+EOF
+mkdir -p /var/lib/hiera
+cat > /var/lib/hiera/defaults.yaml <<EOF
+---
+zookeepers:
+  - $master_name.localdomain
+  - $slave1_name.localdomain
+  - $slave2_name.localdomain
 EOF
 SCRIPT
 
@@ -56,6 +65,17 @@ Vagrant.configure($API_VERSION) do |config|
     end
     slave3.vm.hostname = "$slave3_name.localdomain"
     slave3.vm.network :private_network, ip: "$slave3_ip"
+  end
+
+  #node with kafka
+  config.vm.define :slave4 do |slave4|
+    slave4.vm.box = "centos64"
+    slave4.vm.provider :virtualbox do |v|
+      v.name = "$slave4_name"
+      v.customize ["modifyvm", :id, "--memory", vm_mem]
+    end
+    slave4.vm.hostname = "$slave4_name.localdomain"
+    slave4.vm.network :private_network, ip: "$slave4_ip"
   end
 
   config.vm.provision :shell, :inline => $host_script
