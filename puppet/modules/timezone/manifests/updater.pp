@@ -11,8 +11,8 @@ class timezone::updater {
   }
   ->
   exec { "tzupdate":
-    unless => "/usr/bin/java -jar $tzupdater -t",
-    command => "/usr/bin/java -jar $tzupdater -u",
+    unless => "sudo /usr/bin/java -jar $tzupdater -t",
+    command => "sudo /usr/bin/java -jar $tzupdater -u",
     user => root,
   }
 }
