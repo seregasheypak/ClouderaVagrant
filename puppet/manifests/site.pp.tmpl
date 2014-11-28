@@ -53,14 +53,14 @@ node default {
       group => 'hadoop',
       owner => 'hdfs',
 
+    }    
+    ->
+    package {['java-1.6.0-openjdk', 'java-1.7.0-openjdk']:
+      ensure => absent,
     }
     ->
     package{'jdk':
       ensure => '1.6.0_37-fcs',
-    }
-    ->
-    package {['java-1.6.0-openjdk', 'java-1.7.0-openjdk']:
-      ensure => absent,
     }
     package { 'tzdata':
       ensure => '2014g-1.el6',
