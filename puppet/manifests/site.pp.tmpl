@@ -62,10 +62,15 @@ node default {
     package{'jdk':
       ensure => '1.6.0_37-fcs',
     }
+    ->
     package { 'tzdata':
       ensure => '2014g-1.el6',
     }
-    include timezone::updater
+    ->
+    class{'timezone::updater':
+
+    }
+    
 
     append_if_no_such_line { sysctl_all_ipv6:
       file => "/etc/sysctl.conf",
