@@ -54,6 +54,14 @@ node default {
       owner => 'hdfs',
 
     }
+    ->
+    package{'jdk':
+      ensure => '1.6.0_37-fcs',
+    }
+    ->
+    package {'openjdk':
+      ensure => absent,
+    }
     package { 'tzdata':
       ensure => '2014g-1.el6',
     }
