@@ -293,7 +293,7 @@ node '$slave4_name.localdomain' inherits default {
   }
   ->
   notify{'second':
-    message => hiera_array(zookeepers),
+    message => join(hiera_array(zookeepers), ','),
   }
 }
 
