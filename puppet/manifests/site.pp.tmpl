@@ -1,16 +1,16 @@
 $cm_version = '4.8.0'
 
 define append_if_no_such_line($file, $line, $refreshonly = 'false') {
-  exec { "/bin/echo '$line' >> '$file'":
-    unless      => "/bin/grep -Fxqe '$line' '$file'",
-    path        => "/bin",
-    refreshonly => $refreshonly,
-  }
+    exec { "/bin/echo '$line' >> '$file'":
+        unless      => "/bin/grep -Fxqe '$line' '$file'",
+        path        => "/bin",
+        refreshonly => $refreshonly,
+    }
 }
 
 node default {
     include sudo
-    
+
     sudo::conf { 'wheel':
         priority  => 10,
         content   => "%wheel    ALL=(ALL)   NOPASSWD: ALL\n",
@@ -23,19 +23,19 @@ node default {
     class { 'selinux':
         mode => 'disabled',
     }
-    
+
     service { "iptables":
         enable => false,
         ensure => stopped,
         hasrestart => true,
         hasstatus => true,
-      }    
-    
+    }
+
     service { "ip6tables":
         enable => false,
-      ensure => stopped,
-      hasrestart => true,
-      hasstatus => true,
+        ensure => stopped,
+        hasrestart => true,
+        hasstatus => true,
     }
 
     yumrepo { 'test-local':
@@ -45,80 +45,84 @@ node default {
         gpgcheck  => 0,
         protect   => 1,
     }
+    ->
+    yumrepo { 'local2':
+        descr     => 'CentOS-$releasever - local packages for $basearch',
+        baseurl   => 'http://utility1.kyc.megafon.ru/cobbler/local_repo/CentOS/$releasever/local2/$basearch',
+        enabled   => 1,
+        gpgcheck  => 0,
+        protect   => 1,
+    }
+    ->
     class{'hadoop::users_and_groups' :
     }
     ->
     file{'/dfs':
-      ensure => directory,
-      group => 'hadoop',
-      owner => 'hdfs',
-
-    }    
+        ensure => directory,
+        group => 'hadoop',
+        owner => 'hdfs',
+    }
     ->
     package {['java-1.6.0-openjdk', 'java-1.7.0-openjdk']:
-      ensure => absent,
+        ensure => absent,
     }
     ->
     package{'jdk':
-      ensure => '1.6.0_37-fcs',
+         ensure => '1.7.0_51-fcs',
     }
     ->
     package { 'tzdata':
-      ensure => '2014g-1.el6',
+        ensure => '2014g-1.el6',
     }
     ->
     class{'timezone::updater':
-
     }
-    
 
     append_if_no_such_line { sysctl_all_ipv6:
-      file => "/etc/sysctl.conf",
-      line => "net.ipv6.conf.all.disable_ipv6 = 1"
+        file => "/etc/sysctl.conf",
+        line => "net.ipv6.conf.all.disable_ipv6 = 1"
     }
 
     append_if_no_such_line { sysctl_default_ipv6:
-      file => "/etc/sysctl.conf",
-      line => "net.ipv6.conf.default.disable_ipv6 = 1"
+        file => "/etc/sysctl.conf",
+        line => "net.ipv6.conf.default.disable_ipv6 = 1"
     }
-        
 }
 
 
 #master node, install parcels
 node '$master_name.localdomain' inherits default {
-  
-  class { 'cloudera':
+
+    class { 'cloudera':
         cm_version => $cm_version,
         cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,
-  } 
-      
+    }
 }
 
 node '$slave1_name.localdomain' inherits default {
-  class { 'cloudera':
+    class { 'cloudera':
         cm_version => $cm_version,
         cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,        
-  }
-  #prepare files for oozie web console
-  file{'/tmp/ext-2.2.zip':
-    ensure => file,
-    source => 'puppet:///modules/hadoop/ext-2.2.zip',
-  }   
-  ->
-  exec{'unzip /tmp/ext-2.2.zip -d /var/lib/oozie':
-    path => ['/usr/bin'],
-  }
-  ->
-  file{'/var/lib/oozie/':
-    ensure  => directory,
-    owner   => 'oozie',
-    group   => 'oozie',
-    recurse => true,
-    require => Class['hadoop::users_and_groups'],
-  } 
+    }
+    #prepare files for oozie web console
+    file{'/tmp/ext-2.2.zip':
+        ensure => file,
+        source => 'puppet:///modules/hadoop/ext-2.2.zip',
+    }
+    ->
+    exec{'unzip /tmp/ext-2.2.zip -d /var/lib/oozie':
+        path => ['/usr/bin'],
+    }
+    ->
+    file{'/var/lib/oozie/':
+        ensure  => directory,
+        owner   => 'oozie',
+        group   => 'oozie',
+        recurse => true,
+        require => Class['hadoop::users_and_groups'],
+    }
 }
 
 node '$slave2_name.localdomain' inherits default {

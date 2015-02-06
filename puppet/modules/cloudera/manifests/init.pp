@@ -165,10 +165,10 @@ class cloudera (
   anchor { 'cloudera::begin': }
   anchor { 'cloudera::end': }
 
-  class { 'cloudera::java':
-    ensure      => $ensure,
-    autoupgrade => $autoupgrade,
-  }
+#  class { 'cloudera::java':
+#    ensure      => $ensure,
+#    autoupgrade => $autoupgrade,
+#  }
   class { 'cloudera::cm':
     ensure           => $ensure,
     autoupgrade      => $autoupgrade,
@@ -192,7 +192,7 @@ class cloudera (
     }
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
-    Class['cloudera::java'] ->
+#    Class['cloudera::java'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
   } else {
@@ -226,7 +226,7 @@ class cloudera (
     Anchor['cloudera::begin'] ->
     Class['cloudera::cm::repo'] ->
     Class['cloudera::repo'] ->
-    Class['cloudera::java'] ->
+#    Class['cloudera::java'] ->
     Class['cloudera::cdh'] ->
     Class['cloudera::cm'] ->
     Anchor['cloudera::end']
