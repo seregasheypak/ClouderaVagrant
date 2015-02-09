@@ -46,14 +46,6 @@ node default {
         protect   => 1,
     }
     ->
-    yumrepo { 'local2':
-        descr     => 'CentOS-$releasever - local packages for $basearch',
-        baseurl   => 'http://utility1.kyc.megafon.ru/cobbler/local_repo/CentOS/$releasever/local2/$basearch',
-        enabled   => 1,
-        gpgcheck  => 0,
-        protect   => 1,
-    }
-    ->
     class{'hadoop::users_and_groups' :
     }
     ->
