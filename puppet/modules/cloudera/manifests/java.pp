@@ -61,9 +61,9 @@ class cloudera::java (
     }
   }
 
-  package { 'jdk':
-    ensure => $package_ensure,
-  }
+#  package { 'jdk':
+#    ensure => $package_ensure,
+#  }
 
   file { 'java-profile.d':
     ensure  => $file_ensure,
