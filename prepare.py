@@ -6,10 +6,12 @@ def config():
         'slave1_name': 'vm-cluster-node2',
         'slave2_name': 'vm-cluster-node3',
         'slave3_name': 'vm-cluster-node4',
-        'master_ip': '10.211.55.101',        
+        'slave4_name': 'vm-cluster-node5',
+        'master_ip': '10.211.55.101',
         'slave1_ip': '10.211.55.102',
         'slave2_ip': '10.211.55.103',
         'slave3_ip': '10.211.55.104',
+        'slave4_ip': '10.211.55.104',
     }
     return config
 

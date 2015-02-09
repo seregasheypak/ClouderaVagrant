@@ -283,10 +283,10 @@ node '$slave3_name.localdomain' inherits default {
   } 
 }
 
-node '$slave4_name.localdomain' inherits default {  
-  class{"kafka::hiera":
-    kafka_version => '0.8.1.1-4.el6',
-  }
+node '$slave4_name.localdomain' inherits default {
+    class{"kafka::hiera":
+        kafka_version => '0.8.1.1-4.el6',
+    }
 }
 
 
