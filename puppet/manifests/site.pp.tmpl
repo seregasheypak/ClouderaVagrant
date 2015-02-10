@@ -118,169 +118,168 @@ node '$slave1_name.localdomain' inherits default {
 }
 
 node '$slave2_name.localdomain' inherits default {
-  class { 'cloudera':
+    class { 'cloudera':
         cm_version => $cm_version,
         cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,        
-  } 
-  ->   
-  class { 'cloudera::cm::server': 
+    }
+    ->
+    class { 'cloudera::cm::server':
 
-  }
-  -> 
-  exec{'sleep 60':
-    path => ['/bin'],
-  }
-  ->  
-  file{'/var/lib/cloudera':
-    ensure => directory,
-  }
-  ->
-  file{'/var/log/cloudera-installer/':
-    ensure => directory,
-  }
-  ->
-  file{'/var/lib/cloudera/cloudera-services-installer.zip':
-    ensure => file,
-    source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
-  }
-  
-  $host1_name = '$master_name.localdomain'
-  $host2_name = '$slave1_name.localdomain'
-  $host3_name = '$slave2_name.localdomain'
+    }
+    ->
+    exec{'sleep 60':
+        path => ['/bin'],
+    }
+    ->
+    file{'/var/lib/cloudera':
+        ensure => directory,
+    }
+    ->
+    file{'/var/log/cloudera-installer/':
+        ensure => directory,
+    }
+    ->
+    file{'/var/lib/cloudera/cloudera-services-installer.zip':
+        ensure => file,
+        source => 'puppet:///modules/hadoop/cloudera-services-installer.zip',
+    }
 
-  $host1_ip = '$master_ip'
-  $host2_ip = '$slave1_ip'
-  $host3_ip = '$slave2_ip'
-  exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
-    path    => ['/usr/bin'],
-    creates => '/var/lib/cloudera/lib',
-    require => File['/var/lib/cloudera/cloudera-services-installer.zip'],    
-  }
-  ->
-  file{'/var/lib/cloudera/lib/configuration.yaml':
-    ensure => file,
-    content => template("hadoop/configuration.yaml.erb"),        
-  }
-  ->
-  exec {'run_cloudera_installer':
-    command => 'java -Dyaml.location=/var/lib/cloudera/lib/configuration.yaml -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
-    path => ['/usr/java/default', '/usr/bin'],
-    cwd => '/var/lib/cloudera/lib/',
-    timeout => 0,    
-  }
-  ->
-  class{'hadoop::hivelibs46':
-  }
+    $host1_name = '$master_name.localdomain'
+    $host2_name = '$slave1_name.localdomain'
+    $host3_name = '$slave2_name.localdomain'
+
+    $host1_ip = '$master_ip'
+    $host2_ip = '$slave1_ip'
+    $host3_ip = '$slave2_ip'
+    exec { 'unzip /var/lib/cloudera/cloudera-services-installer.zip -d /var/lib/cloudera/':
+        path    => ['/usr/bin'],
+        creates => '/var/lib/cloudera/lib',
+        require => File['/var/lib/cloudera/cloudera-services-installer.zip'],
+    }
+    ->
+    file{'/var/lib/cloudera/lib/configuration.yaml':
+        ensure => file,
+        content => template("hadoop/configuration.yaml.erb"),
+    }
+    ->
+    exec {'run_cloudera_installer':
+        command => 'java -Dyaml.location=/var/lib/cloudera/lib/configuration.yaml -cp /var/lib/cloudera/lib/cloudera-services-installer-1.0-SNAPSHOT.jar cloudera.services.installer.Main',
+        path => ['/usr/java/default', '/usr/bin'],
+        cwd => '/var/lib/cloudera/lib/',
+        timeout => 0,
+    }
+    ->
+    class{'hadoop::hivelibs46':
+    }
 }
 
 #Postgres node, no hadoop
 node '$slave3_name.localdomain' inherits default {  
-  include monit
-  
-  class { 'postgresql::server':
-    ip_mask_allow_all_users    => '0.0.0.0/0',
-    listen_addresses           => '*',
-    postgres_password          => 'TPSrep0rt!',
-  }
-  ->
-  postgresql::server::db { 'scoring_service_database':
-    user     => 'scoring_service_user',
-    password => postgresql_password('scoring_service_user', 'scoring_service_user'),
-  }   
-  
-  #also this variables are used in template
-  $oracleBase='/oracle'
-  $oracleHome='/oracle/product/11.2/db'
-  $oracleUnqname='TEST'
-  $oracleSid='test'
+    include monit
 
-  oradb::installdb{ '11gR2':
-    version                => '11.2.0.1',
-    file                   => 'linux.x64_11gR2_database',
-    databaseType           => 'SE',
-    oracleBase             => $oracleBase,
-    oracleHome             => $oracleHome,
-    bashProfile            => true,
-    user                   => 'oracle',
-    group                  => 'dba',
-    group_install          => 'oinstall',
-    group_oper             => 'oper',
-    createUser             => true,
-  }
-  ->
-  oradb::net{ 'config net8':
-    oracleHome   => $oracleHome,
-    version      => '11.2',
-    user         => 'oracle',
-    group        => 'dba',    
-  }
-  ->
-  oradb::listener{'stop listener':
-    oracleBase   => $oracleBase,
-    oracleHome   => $oracleHome,
-    user         => 'oracle',
-    group        => 'dba',
-    action       => 'start',  
-  }
-  ->
-  oradb::listener{'start listener':
-    oracleBase   => $oracleBase,
-    oracleHome   => $oracleHome,
-    user         => 'oracle',
-    group        => 'dba',
-    action       => 'start',  
-  }
-  ->
-  oradb::database{ 'testDb_Create':
-    oracleBase              => $oracleBase,
-    oracleHome              => $oracleHome,
-    version                 => '11.2',
-    user                    => 'oracle',
-    group                   => 'dba',  
-    action                  => 'create',
-    dbName                  => 'test',
-    dbDomain                => 'oracle.com',
-    sysPassword             => 'Welcome01',
-    systemPassword          => 'Welcome01',
-    dataFileDestination     => "/oracle/oradata",
-    recoveryAreaDestination => "/oracle/flash_recovery_area",
-    characterSet            => "AL32UTF8",
-    nationalCharacterSet    => "UTF8",
-    initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
-    sampleSchema            => 'TRUE',
-    memoryPercentage        => "40",
-    memoryTotal             => "800",
-    databaseType            => "MULTIPURPOSE",
-    emConfiguration         => "NONE",    
-  }  
-  ->
-  file{'/etc/environment':
-    ensure  =>file,
-    content => template("oradb/environment.erb"), 
-  }
-  ->
-  oradb::sqlplus{"create user TEST identified by TESTpassword;":}
-  ->
-  oradb::sqlplus{"grant DBA to TEST;":}
-  ->
-  oradb::sqlplus{"grant create session to TEST;":}
-  ->
-  oradb::sqlplus{"grant alter session to TEST;":}
-  
+    class { 'postgresql::server':
+        ip_mask_allow_all_users    => '0.0.0.0/0',
+        listen_addresses           => '*',
+        postgres_password          => 'TPSrep0rt!',
+    }
+    ->
+    postgresql::server::db { 'scoring_service_database':
+        user     => 'scoring_service_user',
+        password => postgresql_password('scoring_service_user', 'scoring_service_user'),
+    }
 
-  class { 'glassfish':
-    version        => '3.1.2.2-4',
-    domain         => 'kyc-domain',
-    admin_user     => 'devops',
-    admin_password => 'devops',
-    jvmoptions     => ["-Xmx2G", "-XX:MaxPermSize=512m"],
-  }
-  ->
-  glassfish::rootcertificate { 'scoring-service-root.crt':
-    file_source => 'puppet:///modules/glassfish/scoring-service-root.crt',
-    crt_alias   => 'scoring-service-root',
-  } 
+    #also this variables are used in template
+    $oracleBase='/oracle'
+    $oracleHome='/oracle/product/11.2/db'
+    $oracleUnqname='TEST'
+    $oracleSid='test'
+
+    oradb::installdb{ '11gR2':
+        version                => '11.2.0.1',
+        file                   => 'linux.x64_11gR2_database',
+        databaseType           => 'SE',
+        oracleBase             => $oracleBase,
+        oracleHome             => $oracleHome,
+        bashProfile            => true,
+        user                   => 'oracle',
+        group                  => 'dba',
+        group_install          => 'oinstall',
+        group_oper             => 'oper',
+        createUser             => true,
+    }
+    ->
+    oradb::net{ 'config net8':
+        oracleHome   => $oracleHome,
+        version      => '11.2',
+        user         => 'oracle',
+        group        => 'dba',
+    }
+    ->
+    oradb::listener{'stop listener':
+        oracleBase   => $oracleBase,
+        oracleHome   => $oracleHome,
+        user         => 'oracle',
+        group        => 'dba',
+        action       => 'start',
+    }
+    ->
+    oradb::listener{'start listener':
+        oracleBase   => $oracleBase,
+        oracleHome   => $oracleHome,
+        user         => 'oracle',
+        group        => 'dba',
+        action       => 'start',
+    }
+    ->
+    oradb::database{ 'testDb_Create':
+        oracleBase              => $oracleBase,
+        oracleHome              => $oracleHome,
+        version                 => '11.2',
+        user                    => 'oracle',
+        group                   => 'dba',
+        action                  => 'create',
+        dbName                  => 'test',
+        dbDomain                => 'oracle.com',
+        sysPassword             => 'Welcome01',
+        systemPassword          => 'Welcome01',
+        dataFileDestination     => "/oracle/oradata",
+        recoveryAreaDestination => "/oracle/flash_recovery_area",
+        characterSet            => "AL32UTF8",
+        nationalCharacterSet    => "UTF8",
+        initParams              => "open_cursors=1000,processes=600,job_queue_processes=4",
+        sampleSchema            => 'TRUE',
+        memoryPercentage        => "40",
+        memoryTotal             => "800",
+        databaseType            => "MULTIPURPOSE",
+        emConfiguration         => "NONE",
+    }
+    ->
+    file{'/etc/environment':
+        ensure  =>file,
+        content => template("oradb/environment.erb"),
+    }
+    ->
+    oradb::sqlplus{"create user TEST identified by TESTpassword;":}
+    ->
+    oradb::sqlplus{"grant DBA to TEST;":}
+    ->
+    oradb::sqlplus{"grant create session to TEST;":}
+    ->
+    oradb::sqlplus{"grant alter session to TEST;":}
+
+    class { 'glassfish':
+        version        => '3.1.2.2-4',
+        domain         => 'kyc-domain',
+        admin_user     => 'devops',
+        admin_password => 'devops',
+        jvmoptions     => ["-Xmx2G", "-XX:MaxPermSize=512m"],
+    }
+    ->
+    glassfish::rootcertificate { 'scoring-service-root.crt':
+        file_source => 'puppet:///modules/glassfish/scoring-service-root.crt',
+        crt_alias   => 'scoring-service-root',
+    }
 }
 
 node '$slave4_name.localdomain' inherits default {
@@ -288,5 +287,3 @@ node '$slave4_name.localdomain' inherits default {
         kafka_version => '0.8.1.1-4.el6',
     }
 }
-
-
