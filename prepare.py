@@ -11,7 +11,7 @@ def config():
         'slave1_ip': '10.211.55.102',
         'slave2_ip': '10.211.55.103',
         'slave3_ip': '10.211.55.104',
-        'slave4_ip': '10.211.55.104',
+        'slave4_ip': '10.211.55.105',
     }
     return config
 
