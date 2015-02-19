@@ -95,7 +95,7 @@ node '$master_name.localdomain' inherits default {
       ensure => present,
       shell => '/sbin/nologin',
       home => '/home/ftpuser',
-      managehome => 'false',
+      managehome => 'true',
       password => '$6$8RHv9baaWgVapF6Z$WDHNawWzIMZJlXI303pTGQaYXvOMvZGJFlF5HPvR.mhxShMDyeriWIq.7B/6f3VniFzedkEmO5lx8BxUW1oFc.', #ftppassword
     }
     ->
