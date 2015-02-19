@@ -90,6 +90,31 @@ node '$master_name.localdomain' inherits default {
         cm_server_host => '$slave2_name.localdomain',
         use_parcels    => true,
     }
+
+    user {'ftpuser':
+      ensure => present,
+      shell => '/sbin/nologin',
+      home => '/home/ftpuser',
+      managehome => 'false',
+      password => '$6$8RHv9baaWgVapF6Z$WDHNawWzIMZJlXI303pTGQaYXvOMvZGJFlF5HPvR.mhxShMDyeriWIq.7B/6f3VniFzedkEmO5lx8BxUW1oFc.', #ftppassword
+    }
+    ->
+    file { "/etc/vsftpd/chroot_list":
+      content => "ftpuser",
+    }
+    ->
+    class { 'vsftpd':
+      anonymous_enable  => 'NO',
+      write_enable      => 'YES',
+      ftpd_banner       => 'Hello there!',
+      chroot_local_user => 'YES',
+      directives => {
+        'chroot_list_file'  =>  '/etc/vsftpd/chroot_list',
+        'chroot_list_enable' => 'YES',
+        'check_shell' => 'NO',
+      },
+    }  
+
 }
 
 node '$slave1_name.localdomain' inherits default {
